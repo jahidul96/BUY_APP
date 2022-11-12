@@ -4,8 +4,10 @@ const { dbConnection } = require("./db/db");
 require("dotenv").config();
 
 // imports module
-const authHandler = require("./routes/authRoutes");
+const userHandler = require("./routes/userRoutes");
 const sellerAuthHandler = require("./routes/sellerAuthRoutes");
+const productHandler = require("./routes/productRoutes");
+const recordHandler = require("./routes/sellRecordRoutes");
 
 // app initialize
 const app = express();
@@ -16,8 +18,10 @@ const port = process.env.PORT || 5000;
 app.use(express.json());
 
 // router call middlewares!
-app.use(authHandler);
+app.use(userHandler);
 app.use("/seller", sellerAuthHandler);
+app.use("/product", productHandler);
+app.use("/sellrecord", recordHandler);
 
 app.use((err, req, res, next) => {
   if (res.headersSent) {
