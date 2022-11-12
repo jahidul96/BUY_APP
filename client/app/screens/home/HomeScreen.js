@@ -1,7 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
-import { UserContext } from "../../context/UserContext";
-import UseFetch from "../../api/useFetch";
 
 const HomeScreen = () => {
   return (
