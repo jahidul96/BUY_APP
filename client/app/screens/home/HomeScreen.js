@@ -17,6 +17,7 @@ import ProductCategorie from "../../components/ProductCategorie";
 import Products from "../../components/Products";
 import UseFetch from "../../api/useFetch";
 import { ApiPoint } from "../../api/endPoint";
+import TopSearchComp from "../../components/Reuse/TopSearchComp";
 
 const HomeScreen = () => {
   const { loading, err, data } = UseFetch(`${ApiPoint}/product`);
@@ -30,13 +31,13 @@ const HomeScreen = () => {
       }}
     >
       <StatusBar barStyle={"light-content"} backgroundColor={Color.RED} />
-      <View style={styles.topInputWrapper}>
-        <Input
-          placeholder="Search.."
-          extraInputStyle={styles.extraInputStyle}
-        />
-        <Ionicons name="person-circle" size={30} color={Color.WHITE} />
-      </View>
+      <TopSearchComp
+        noBack={true}
+        extraInputStyle={styles.extraInputStyle}
+        name="person-circle"
+        color={Color.WHITE}
+      />
+
       <ScrollView style={styles.root}>
         <SliderCarousel />
         <ProductCategorie />

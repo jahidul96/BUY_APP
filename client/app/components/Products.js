@@ -2,12 +2,18 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { HEIGHT, WIDTH } from "../utils/Dimension";
 import { Color } from "../COLORS/Colors";
+import { useNavigation } from "@react-navigation/native";
 
 const Products = ({ ProductsData }) => {
+  const navigation = useNavigation();
+  const _productDetails = (value) => {
+    navigation.navigate("ProductDetails", { value });
+    // console.log(value);
+  };
   return (
     <View style={styles.container}>
       {ProductsData?.map((data, index) => (
-        <Product data={data} key={data._id} />
+        <Product data={data} key={data._id} onPress={_productDetails} />
       ))}
     </View>
   );
@@ -15,9 +21,12 @@ const Products = ({ ProductsData }) => {
 
 export default Products;
 
-const Product = ({ data }) => {
+const Product = ({ data, onPress }) => {
   return (
-    <TouchableOpacity style={styles.productContainer}>
+    <TouchableOpacity
+      style={styles.productContainer}
+      onPress={() => onPress(data)}
+    >
       <Image source={{ uri: data.featuredImg[0] }} style={styles.imgStyle} />
       <View style={styles.footerContainer}>
         <View
@@ -48,9 +57,9 @@ const styles = StyleSheet.create({
     width: WIDTH / 2.2,
     paddingBottom: 5,
     backgroundColor: Color.WHITE,
-    elevation: 2,
+    elevation: 1,
     borderRadius: 5,
-    marginBottom: 10,
+    marginBottom: 5,
   },
   imgStyle: {
     width: "100%",
