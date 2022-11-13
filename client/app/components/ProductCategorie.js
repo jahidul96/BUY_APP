@@ -1,4 +1,11 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  ImageBackground,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React from "react";
 import { Categories } from "../data/Categories";
 import { Color } from "../COLORS/Colors";
@@ -8,10 +15,14 @@ const ProductCategorie = () => {
     <View style={styles.container}>
       {Categories.map((data) => (
         <TouchableOpacity style={styles.wrapper} key={data.id}>
-          <View style={styles.imageWrapper}>
-            <Image source={{ uri: data.img }} style={styles.imgStyle} />
-          </View>
-          <Text style={styles.categorieText}>{data.categorie}</Text>
+          <ImageBackground
+            blurRadius={2}
+            source={{ uri: data.img }}
+            style={styles.imgStyle}
+            borderRadius={10}
+          >
+            <Text style={styles.categorieText}>{data.categorie}</Text>
+          </ImageBackground>
         </TouchableOpacity>
       ))}
     </View>
@@ -24,27 +35,28 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     flexWrap: "wrap",
-    paddingVertical: 15,
+    paddingTop: 10,
+    paddingHorizontal: 10,
   },
   wrapper: {
-    width: 70,
+    width: 57,
     height: 50,
-    justifyContent: "space-between",
+    marginBottom: 15,
+    marginRight: 10,
     alignItems: "center",
-    marginBottom: 20,
   },
-  imageWrapper: {
-    width: 40,
-    height: 30,
-  },
+
   imgStyle: {
-    width: 35,
-    height: 25,
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
   },
   categorieText: {
-    fontSize: 11,
+    fontSize: 10,
+    color: Color.WHITE,
+    fontWeight: "700",
     width: "70%",
     textAlign: "center",
-    marginTop: 4,
   },
 });

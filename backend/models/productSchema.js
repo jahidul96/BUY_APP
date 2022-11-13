@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 
 const productSchema = new mongoose.Schema(
   {
+    name: {
+      type: String,
+      required: true,
+    },
     description: {
       type: String,
       required: true,
@@ -22,18 +26,22 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    featuredImg: [Array],
-    tags: [Array],
+    featuredImg: Array,
+    tags: Array,
     click: {
       type: Number,
       default: 0,
     },
-    rating: [Array],
+    rating: Array,
     likes: Array,
     comments: Array,
     postedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Sellerauth",
+    },
+    totalSell: {
+      type: Number,
+      default: 0,
     },
   },
   {

@@ -23,7 +23,7 @@ export const SliderCarousel = () => {
       loop
       width={WIDTH}
       height={WIDTH / 2}
-      autoPlay={true}
+      autoPlay={false}
       data={data}
       scrollAnimationDuration={5000}
       renderItem={({ item, index }) => (

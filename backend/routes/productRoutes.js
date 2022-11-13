@@ -10,7 +10,8 @@ router.get("/", async (req, res, next) => {
       .populate("postedBy", {
         password: 0,
       })
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .limit(15);
 
     res.status(200).json({
       status: "succes",
