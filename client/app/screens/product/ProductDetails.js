@@ -21,9 +21,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import UseFetch from "../../api/useFetch";
 import { ApiPoint } from "../../api/endPoint";
 import Products from "../../components/Products";
-
-const takaIcon =
-  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-c7ZugYlkTvyPEtM-TLrQVCVtThA-3BhhXO7pJ9JQFpYcKQVgMxiM74BZ7fL11Ou9xig&usqp=CAU";
+import { pageLogo, takaIcon } from "../../utils/DummyImgFile";
 
 const ProductDetails = ({ route }) => {
   const { loading, err, data } = UseFetch(`${ApiPoint}/product`);
@@ -81,6 +79,16 @@ const ProductDetails = ({ route }) => {
                 <Fontisto name="hipchat" size={16} />
                 <Text style={[styles.likes, { marginLeft: 5 }]}>
                   Ask question or give review
+                </Text>
+              </View>
+              <Ionicons name="chevron-forward-outline" size={18} />
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.askContainer}>
+              <View style={[styles.flexStyle, { flex: 1 }]}>
+                <Image source={{ uri: pageLogo }} style={styles.shopLogo} />
+                <Text style={[styles.likes, styles.shopname]}>
+                  {value.postedBy.shopname}
                 </Text>
               </View>
               <Ionicons name="chevron-forward-outline" size={18} />
@@ -213,6 +221,12 @@ const styles = StyleSheet.create({
   totalSell: {
     marginTop: -4,
   },
+  shopLogo: {
+    width: 20,
+    height: 20,
+    borderRadius: 100,
+  },
+  shopname: { marginLeft: 5, fontWeight: "700" },
   likes: {
     fontSize: 12,
     marginLeft: 3,
