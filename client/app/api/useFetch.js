@@ -17,6 +17,8 @@ const UseFetch = (url) => {
       } catch (error) {
         setLoading(false);
         setErr(error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -33,6 +35,8 @@ const UseFetch = (url) => {
     } catch (error) {
       setLoading(false);
       setErr(error);
+    } finally {
+      setLoading(false);
     }
   };
 

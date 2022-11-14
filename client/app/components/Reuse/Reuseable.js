@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Image,
   StyleSheet,
   Text,
@@ -7,6 +8,12 @@ import {
   View,
 } from "react-native";
 import { Color } from "../../COLORS/Colors";
+
+export const Lodder = () => (
+  <View style={styles.lodderStyle}>
+    <ActivityIndicator size="small" color={Color.RED} />
+  </View>
+);
 
 export const Input = ({ placeholder, extraInputStyle }) => {
   return (
@@ -40,6 +47,9 @@ export const ProductImageSlider = ({ data, onPress, imgIndex }) => (
 );
 
 const styles = StyleSheet.create({
+  lodderStyle: {
+    marginTop: 30,
+  },
   inputStyle: {
     width: "100%",
     height: 33,

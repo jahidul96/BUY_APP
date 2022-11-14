@@ -5,13 +5,14 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "../screens/home/HomeScreen";
 import ProductDetails from "../screens/product/ProductDetails";
 import SearchScreen from "../screens/search/SearchScreen";
+import BottomNavigation from "./BottomNavigation";
 
 const Stack = createNativeStackNavigator();
 
 const Navigation = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="main" component={BottomNavigation} />
       <Stack.Screen name="SearchScreen" component={SearchScreen} />
       <Stack.Screen name="ProductDetails" component={ProductDetails} />
     </Stack.Navigator>

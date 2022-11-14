@@ -14,6 +14,7 @@ import TopSearchComp from "../../components/Reuse/TopSearchComp";
 import { WIDTH } from "../../utils/Dimension";
 import {
   ButtonComp,
+  Lodder,
   ProductImageSlider,
 } from "../../components/Reuse/Reuseable";
 import Fontisto from "react-native-vector-icons/Fontisto";
@@ -111,9 +112,7 @@ const ProductDetails = ({ route }) => {
         <View style={styles.imgSliderWrapper}>
           <Text style={styles.titleText}>Similar Product's</Text>
           {loading ? (
-            <View style={styles.loadingContainer}>
-              <ActivityIndicator size="small" color="#0000ff" />
-            </View>
+            <Lodder />
           ) : err ? (
             <View>
               <Text>Something went wrong</Text>

@@ -1,8 +1,7 @@
 import { StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { UserProvider } from "./app/context/UserContext";
-import BottomNavigation from "./app/navigation/BottomNavigation";
+import Navigation from "./app/navigation/Navigation";
 
 export default function App() {
   return (
@@ -12,7 +11,7 @@ export default function App() {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <NavigationContainer>
-          <BottomNavigation />
+          <Navigation />
         </NavigationContainer>
       </KeyboardAvoidingView>
     </UserProvider>

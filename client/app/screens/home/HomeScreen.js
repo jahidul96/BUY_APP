@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { Color } from "../../COLORS/Colors";
-import { Input } from "../../components/Reuse/Reuseable";
+import { Input, Lodder } from "../../components/Reuse/Reuseable";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { HEIGHT, WIDTH } from "../../utils/Dimension";
 import { SliderCarousel } from "../../components/SliderCarousel";
@@ -44,12 +44,11 @@ const HomeScreen = () => {
         <View style={styles.productWrapper}>
           <Text style={styles.titleText}>Featured Product's</Text>
           {loading ? (
-            <View style={styles.loadingContainer}>
-              <ActivityIndicator size="small" color="#0000ff" />
-            </View>
+            <Lodder />
           ) : err ? (
-            <View>
-              <Text>Something went wrong</Text>
+            <View style={styles.errorStyle}>
+              <Text>Something went wrong!</Text>
+              <Text>{err?.message}</Text>
             </View>
           ) : (
             <Products ProductsData={data?.products} />
@@ -95,5 +94,10 @@ const styles = StyleSheet.create({
   },
   loadingContainer: {
     marginTop: 30,
+  },
+  errorStyle: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 20,
   },
 });
