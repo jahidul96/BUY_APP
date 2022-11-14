@@ -31,6 +31,8 @@ import MatchProducts from "../../components/Reuse/MatchProducts";
 const ProductDetails = ({ route }) => {
   const { value } = route.params;
   const [wait, setWait] = useState(true);
+
+  // data fetch from db
   const { loading, err, data } = UseFetch(
     `${ApiPoint}/product/similarproduct?categorie=${value?.categorie}`
   );
