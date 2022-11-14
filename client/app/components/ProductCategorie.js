@@ -10,11 +10,15 @@ import React from "react";
 import { Categories } from "../data/Categories";
 import { Color } from "../COLORS/Colors";
 
-const ProductCategorie = () => {
+const ProductCategorie = ({ onPress }) => {
   return (
     <View style={styles.container}>
       {Categories.map((data) => (
-        <TouchableOpacity style={styles.wrapper} key={data.id}>
+        <TouchableOpacity
+          style={styles.wrapper}
+          key={data.id}
+          onPress={() => onPress(data)}
+        >
           <ImageBackground
             blurRadius={2}
             source={{ uri: data.img }}

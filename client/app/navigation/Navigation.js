@@ -6,6 +6,7 @@ import HomeScreen from "../screens/home/HomeScreen";
 import ProductDetails from "../screens/product/ProductDetails";
 import SearchScreen from "../screens/search/SearchScreen";
 import BottomNavigation from "./BottomNavigation";
+import Categories from "../screens/categorieScreen/Categories";
 
 const Stack = createNativeStackNavigator();
 
@@ -14,6 +15,7 @@ const Navigation = () => {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="main" component={BottomNavigation} />
       <Stack.Screen name="SearchScreen" component={SearchScreen} />
+      <Stack.Screen name="Categories" component={Categories} />
       <Stack.Screen name="ProductDetails" component={ProductDetails} />
     </Stack.Navigator>
   );

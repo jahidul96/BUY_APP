@@ -26,6 +26,7 @@ import Products from "../../components/Products";
 import { pageLogo, takaIcon } from "../../utils/DummyImgFile";
 import dataFetch from "../../api/dataFetch";
 import Wait from "../../components/Wait";
+import MatchProducts from "../../components/Reuse/MatchProducts";
 
 const ProductDetails = ({ route }) => {
   const { value } = route.params;
@@ -129,18 +130,18 @@ const ProductDetails = ({ route }) => {
             <View style={styles.imgSliderWrapper}>
               <Text>Reviews...</Text>
             </View>
-
+            <Text style={styles.titleText}>Similar Product's</Text>
             <MatchProducts
               loading={loading}
               err={err}
               products={data?.products}
-              text="Similar Product's"
             />
+
+            <Text style={styles.titleText}>From Same Store</Text>
             <MatchProducts
               loading={load}
               err={wrong}
               products={resData?.products}
-              text="From Same Store"
             />
           </ScrollView>
 
@@ -152,21 +153,6 @@ const ProductDetails = ({ route }) => {
 };
 
 export default ProductDetails;
-
-const MatchProducts = ({ loading, err, products, text }) => (
-  <View style={styles.imgSliderWrapper}>
-    <Text style={styles.titleText}>{text}</Text>
-    {loading ? (
-      <Lodder />
-    ) : err ? (
-      <NotifyComp text="Something went wrong" />
-    ) : products.length > 0 ? (
-      <Products ProductsData={products} />
-    ) : (
-      <NotifyComp text="No item till now" />
-    )}
-  </View>
-);
 
 const BottomComp = () => {
   return (
@@ -287,6 +273,7 @@ const styles = StyleSheet.create({
 
   titleText: {
     marginBottom: 8,
+    paddingHorizontal: 10,
   },
 
   //   BottomContainer styles

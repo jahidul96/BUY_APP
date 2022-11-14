@@ -22,8 +22,9 @@ import TopSearchComp from "../../components/Reuse/TopSearchComp";
 const HomeScreen = ({ navigation }) => {
   const { loading, err, data } = UseFetch(`${ApiPoint}/product`);
 
-  // console.log(data);
-  // console.log(err?.message);
+  const goToCategories = (value) => {
+    navigation.navigate("Categories", { value });
+  };
   return (
     <View
       style={{
@@ -40,7 +41,7 @@ const HomeScreen = ({ navigation }) => {
 
       <ScrollView style={styles.root}>
         <SliderCarousel />
-        <ProductCategorie />
+        <ProductCategorie onPress={goToCategories} />
         <View style={styles.productWrapper}>
           <Text style={styles.titleText}>Featured Product's</Text>
           {loading ? (

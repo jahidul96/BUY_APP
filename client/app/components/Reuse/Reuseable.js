@@ -16,8 +16,20 @@ export const Lodder = () => (
 );
 
 export const NotifyComp = ({ text }) => (
-  <View>
-    <Text>{text}</Text>
+  <View
+    style={{
+      alignItems: "center",
+      marginTop: 100,
+    }}
+  >
+    <Text
+      style={{
+        fontSize: 17,
+        fontWeight: "600",
+      }}
+    >
+      {text}
+    </Text>
   </View>
 );
 
