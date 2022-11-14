@@ -23,6 +23,55 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+// get categorie based product
+router.get("/similarproduct", async (req, res, next) => {
+  const { categorie } = req.query;
+
+  try {
+    const products = await Product.find({
+      categorie: { $regex: categorie, $options: "i" },
+    })
+      .populate("postedBy", {
+        password: 0,
+      })
+      .sort({ createdAt: -1 })
+      .limit(10);
+
+    res.status(200).json({
+      status: "succes",
+      totleProducts: products.length,
+      products,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// same store product
+router.get("/samestore", async (req, res, next) => {
+  const { id } = req.query;
+
+  try {
+    const products = await Product.find({
+      postedBy: id,
+    })
+      .populate("postedBy", {
+        password: 0,
+      })
+      .sort({ createdAt: -1 })
+      .limit(10);
+
+    res.status(200).json({
+      status: "succes",
+      message: "same store product",
+      totleProducts: products.length,
+      products,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 // post a product
 router.post("/addproduct", async (req, res, next) => {
   try {

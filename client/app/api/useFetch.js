@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -5,6 +6,8 @@ const UseFetch = (url) => {
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState(null);
   const [data, setData] = useState(null);
+
+  const navigation = useNavigation();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,8 +25,13 @@ const UseFetch = (url) => {
       }
     };
 
-    fetchData();
-  }, [url]);
+    const unsubscribe = navigation.addListener("focus", () => {
+      // do something
+      fetchData();
+    });
+
+    return unsubscribe;
+  }, [url, navigation]);
 
   const reFetch = async () => {
     setLoading(true);

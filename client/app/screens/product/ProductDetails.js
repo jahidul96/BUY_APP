@@ -8,13 +8,14 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Color } from "../../COLORS/Colors";
 import TopSearchComp from "../../components/Reuse/TopSearchComp";
 import { WIDTH } from "../../utils/Dimension";
 import {
   ButtonComp,
   Lodder,
+  NotifyComp,
   ProductImageSlider,
 } from "../../components/Reuse/Reuseable";
 import Fontisto from "react-native-vector-icons/Fontisto";
@@ -23,11 +24,27 @@ import UseFetch from "../../api/useFetch";
 import { ApiPoint } from "../../api/endPoint";
 import Products from "../../components/Products";
 import { pageLogo, takaIcon } from "../../utils/DummyImgFile";
+import dataFetch from "../../api/dataFetch";
+import Wait from "../../components/Wait";
 
 const ProductDetails = ({ route }) => {
-  const { loading, err, data } = UseFetch(`${ApiPoint}/product`);
   const { value } = route.params;
+  const [wait, setWait] = useState(true);
+  const { loading, err, data } = UseFetch(
+    `${ApiPoint}/product/similarproduct?categorie=${value?.categorie}`
+  );
+
+  const { load, wrong, resData } = dataFetch(
+    `${ApiPoint}/product/samestore?id=${value?.postedBy._id}`
+  );
+
   const [imgIndex, setImgIndex] = useState(0);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setWait(false);
+    }, 1500);
+  }, [value]);
 
   const selectImg = (i) => {
     setImgIndex(i);
@@ -41,94 +58,115 @@ const ProductDetails = ({ route }) => {
         cart
         color={Color.RED}
       />
-      <ScrollView style={styles.contentWrapper}>
-        <Image
-          source={{ uri: value.featuredImg[imgIndex] }}
-          style={styles.imgStyle}
-        />
-        <View style={styles.productDescWrapper}>
-          <View style={styles.productDescContainer}>
-            <View style={styles.paddingHorizontal}>
-              <Text style={styles.name}>{value.name}</Text>
+      {wait ? (
+        <Wait />
+      ) : (
+        <>
+          <ScrollView style={styles.contentWrapper}>
+            <Image
+              source={{ uri: value.featuredImg[imgIndex] }}
+              style={styles.imgStyle}
+            />
+            <View style={styles.productDescWrapper}>
+              <View style={styles.productDescContainer}>
+                <View style={styles.paddingHorizontal}>
+                  <Text style={styles.name}>{value.name}</Text>
 
-              <Text style={styles.description}>{value.description}</Text>
-            </View>
-            <View style={styles.priceWrapper}>
-              <Image source={{ uri: takaIcon }} style={styles.takaIcon} />
-              <Text style={styles.price}>{value.price}</Text>
-            </View>
+                  <Text style={styles.description}>{value.description}</Text>
+                </View>
+                <View style={styles.priceWrapper}>
+                  <Image source={{ uri: takaIcon }} style={styles.takaIcon} />
+                  <Text style={styles.price}>{value.price}</Text>
+                </View>
 
-            <View style={styles.ratingandSellContainer}>
-              <Fontisto name="star" color={"orange"} />
-              <Text style={styles.rating}>
-                {value.rating.length} ({value.rating.length})
-              </Text>
+                <View style={styles.ratingandSellContainer}>
+                  <Fontisto name="star" color={"orange"} />
+                  <Text style={styles.rating}>
+                    {value.rating.length} ({value.rating.length})
+                  </Text>
 
-              <View style={[styles.flexStyle, styles.soldContainer]}>
-                <Ionicons name="chevron-forward-outline" size={18} />
-                <Text style={styles.likes}>Total Sold </Text>
-                <Text style={styles.totalSell}>{value.totalSell}</Text>
+                  <View style={[styles.flexStyle, styles.soldContainer]}>
+                    <Ionicons name="chevron-forward-outline" size={18} />
+                    <Text style={styles.likes}>Total Sold </Text>
+                    <Text style={styles.totalSell}>{value.totalSell}</Text>
+                  </View>
+                  <View style={[styles.flexStyle, styles.soldContainer]}>
+                    <Ionicons name="heart-outline" size={18} />
+                    <Text style={styles.likes}>Likes {value.likes.length}</Text>
+                  </View>
+                </View>
+
+                <TouchableOpacity style={styles.askContainer}>
+                  <View style={[styles.flexStyle, { flex: 1 }]}>
+                    <Fontisto name="hipchat" size={16} />
+                    <Text style={[styles.likes, { marginLeft: 5 }]}>
+                      Ask question or give review
+                    </Text>
+                  </View>
+                  <Ionicons name="chevron-forward-outline" size={18} />
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.askContainer}>
+                  <View style={[styles.flexStyle, { flex: 1 }]}>
+                    <Image source={{ uri: pageLogo }} style={styles.shopLogo} />
+                    <Text style={[styles.likes, styles.shopname]}>
+                      {value.postedBy.shopname}
+                    </Text>
+                  </View>
+                  <Ionicons name="chevron-forward-outline" size={18} />
+                </TouchableOpacity>
               </View>
-              <View style={[styles.flexStyle, styles.soldContainer]}>
-                <Ionicons name="heart-outline" size={18} />
-                <Text style={styles.likes}>Likes {value.likes.length}</Text>
-              </View>
             </View>
 
-            <TouchableOpacity style={styles.askContainer}>
-              <View style={[styles.flexStyle, { flex: 1 }]}>
-                <Fontisto name="hipchat" size={16} />
-                <Text style={[styles.likes, { marginLeft: 5 }]}>
-                  Ask question or give review
-                </Text>
-              </View>
-              <Ionicons name="chevron-forward-outline" size={18} />
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.askContainer}>
-              <View style={[styles.flexStyle, { flex: 1 }]}>
-                <Image source={{ uri: pageLogo }} style={styles.shopLogo} />
-                <Text style={[styles.likes, styles.shopname]}>
-                  {value.postedBy.shopname}
-                </Text>
-              </View>
-              <Ionicons name="chevron-forward-outline" size={18} />
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        <View style={styles.imgSliderWrapper}>
-          <ProductImageSlider
-            data={value.featuredImg}
-            onPress={selectImg}
-            imgIndex={imgIndex}
-          />
-        </View>
-
-        <View style={styles.imgSliderWrapper}>
-          <Text>Reviews...</Text>
-        </View>
-
-        <View style={styles.imgSliderWrapper}>
-          <Text style={styles.titleText}>Similar Product's</Text>
-          {loading ? (
-            <Lodder />
-          ) : err ? (
-            <View>
-              <Text>Something went wrong</Text>
+            <View style={styles.imgSliderWrapper}>
+              <ProductImageSlider
+                data={value.featuredImg}
+                onPress={selectImg}
+                imgIndex={imgIndex}
+              />
             </View>
-          ) : (
-            <Products ProductsData={data?.products} />
-          )}
-        </View>
-      </ScrollView>
 
-      <BottomComp />
+            <View style={styles.imgSliderWrapper}>
+              <Text>Reviews...</Text>
+            </View>
+
+            <MatchProducts
+              loading={loading}
+              err={err}
+              products={data?.products}
+              text="Similar Product's"
+            />
+            <MatchProducts
+              loading={load}
+              err={wrong}
+              products={resData?.products}
+              text="From Same Store"
+            />
+          </ScrollView>
+
+          <BottomComp />
+        </>
+      )}
     </View>
   );
 };
 
 export default ProductDetails;
+
+const MatchProducts = ({ loading, err, products, text }) => (
+  <View style={styles.imgSliderWrapper}>
+    <Text style={styles.titleText}>{text}</Text>
+    {loading ? (
+      <Lodder />
+    ) : err ? (
+      <NotifyComp text="Something went wrong" />
+    ) : products.length > 0 ? (
+      <Products ProductsData={products} />
+    ) : (
+      <NotifyComp text="No item till now" />
+    )}
+  </View>
+);
 
 const BottomComp = () => {
   return (

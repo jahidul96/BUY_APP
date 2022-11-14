@@ -15,6 +15,12 @@ export const Lodder = () => (
   </View>
 );
 
+export const NotifyComp = ({ text }) => (
+  <View>
+    <Text>{text}</Text>
+  </View>
+);
+
 export const Input = ({ placeholder, extraInputStyle }) => {
   return (
     <TextInput

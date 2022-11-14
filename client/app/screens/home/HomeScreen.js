@@ -19,7 +19,7 @@ import UseFetch from "../../api/useFetch";
 import { ApiPoint } from "../../api/endPoint";
 import TopSearchComp from "../../components/Reuse/TopSearchComp";
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   const { loading, err, data } = UseFetch(`${ApiPoint}/product`);
 
   // console.log(data);
