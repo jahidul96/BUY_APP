@@ -42,10 +42,18 @@ export const Input = ({ placeholder, extraInputStyle }) => {
   );
 };
 
-export const ButtonComp = ({ text, btnExtrastyle }) => {
+export const ButtonComp = ({
+  text,
+  btnExtrastyle,
+  btnExtraTextStyle,
+  onPress,
+}) => {
   return (
-    <TouchableOpacity style={[styles.buttonStyle, btnExtrastyle]}>
-      <Text style={styles.btnText}>{text}</Text>
+    <TouchableOpacity
+      style={[styles.buttonStyle, btnExtrastyle]}
+      onPress={onPress}
+    >
+      <Text style={[styles.btnText, btnExtraTextStyle]}>{text}</Text>
     </TouchableOpacity>
   );
 };
