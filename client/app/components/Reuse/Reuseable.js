@@ -8,10 +8,21 @@ import {
   View,
 } from "react-native";
 import { Color } from "../../COLORS/Colors";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 export const Lodder = () => (
   <View style={styles.lodderStyle}>
     <ActivityIndicator size="small" color={Color.RED} />
+  </View>
+);
+
+export const TopComp = ({ text, onPress, extraStyle, name }) => (
+  <View style={[styles.topCompContainer, extraStyle]}>
+    <TouchableOpacity onPress={onPress}>
+      <Ionicons name={name ? name : "arrow-back"} size={20} />
+    </TouchableOpacity>
+    <Text style={styles.topText}>{text}</Text>
+    <Text></Text>
   </View>
 );
 
@@ -115,5 +126,15 @@ const styles = StyleSheet.create({
   productImgStyle: {
     width: "100%",
     height: "100%",
+  },
+
+  topCompContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    height: 45,
+  },
+  topText: {
+    fontSize: 16,
   },
 });

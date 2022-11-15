@@ -10,7 +10,7 @@ const LoggedComp = () => {
     navigation.navigate("Register");
   };
   const gotoLogin = () => {
-    navigation.navigate("Register");
+    navigation.navigate("Login");
   };
   return (
     <View style={styles.container}>

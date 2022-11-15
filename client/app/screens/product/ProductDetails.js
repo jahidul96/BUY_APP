@@ -99,25 +99,32 @@ const ProductDetails = ({ route }) => {
                   </View>
                 </View>
 
-                <TouchableOpacity style={styles.askContainer}>
-                  <View style={[styles.flexStyle, { flex: 1 }]}>
-                    <Fontisto name="hipchat" size={16} />
-                    <Text style={[styles.likes, { marginLeft: 5 }]}>
-                      Ask question or give review
-                    </Text>
-                  </View>
-                  <Ionicons name="chevron-forward-outline" size={18} />
-                </TouchableOpacity>
+                <View style={styles.askContainer}>
+                  <TouchableOpacity style={styles.wrapperstyle}>
+                    <View style={[styles.flexStyle, { flex: 1 }]}>
+                      <Fontisto name="hipchat" size={16} />
+                      <Text style={[styles.likes, { marginLeft: 5 }]}>
+                        Ask question or give review
+                      </Text>
+                    </View>
+                    <Ionicons name="chevron-forward-outline" size={18} />
+                  </TouchableOpacity>
+                </View>
 
-                <TouchableOpacity style={styles.askContainer}>
-                  <View style={[styles.flexStyle, { flex: 1 }]}>
-                    <Image source={{ uri: pageLogo }} style={styles.shopLogo} />
-                    <Text style={[styles.likes, styles.shopname]}>
-                      {value.postedBy.shopname}
-                    </Text>
-                  </View>
-                  <Ionicons name="chevron-forward-outline" size={18} />
-                </TouchableOpacity>
+                <View style={styles.askContainer}>
+                  <TouchableOpacity style={styles.wrapperstyle}>
+                    <View style={[styles.flexStyle, { flex: 1 }]}>
+                      <Image
+                        source={{ uri: pageLogo }}
+                        style={styles.shopLogo}
+                      />
+                      <Text style={[styles.likes, styles.shopname]}>
+                        {value.postedBy.shopname}
+                      </Text>
+                    </View>
+                    <Ionicons name="chevron-forward-outline" size={18} />
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
 
@@ -258,7 +265,7 @@ const styles = StyleSheet.create({
     marginTop: -3,
   },
   askContainer: {
-    height: 35,
+    height: 40,
     justifyContent: "center",
     borderTopColor: Color.GRAY,
     borderTopWidth: 1,
@@ -266,6 +273,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 5,
     paddingRight: 10,
+  },
+
+  wrapperstyle: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    height: "100%",
   },
 
   imgSliderWrapper: {
