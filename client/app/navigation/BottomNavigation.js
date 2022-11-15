@@ -3,10 +3,10 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import ProfileScreen from "../screens/profile/ProfileScreen";
 import Cart from "../screens/cart/Cart";
-import Chat from "../screens/chat/Chat";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Color } from "../COLORS/Colors";
 import HomeScreen from "../screens/home/HomeScreen";
+import Favorite from "../screens/favorite/Favorite";
 
 const Tab = createBottomTabNavigator();
 
@@ -35,12 +35,12 @@ const BottomNavigation = () => {
         }}
       />
       <Tab.Screen
-        name="Chat"
-        component={Chat}
+        name="Favorite"
+        component={Favorite}
         options={{
-          tabBarLabel: "Chat",
+          tabBarLabel: "Favorite",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="chatbox" color={color} size={22} />
+            <Ionicons name="heart" color={color} size={22} />
           ),
         }}
       />

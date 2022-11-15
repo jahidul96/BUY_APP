@@ -106,4 +106,28 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
+// like a product
+
+router.put("/like/:id", async (req, res, next) => {
+  const id = req.params.id;
+
+  try {
+    const product = await Product.findByIdAndUpdate(
+      { _id: id },
+      {
+        $set: {
+          likes: req.body,
+        },
+      },
+      { new: true }
+    );
+    res.status(201).json({
+      succes: true,
+      product,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;

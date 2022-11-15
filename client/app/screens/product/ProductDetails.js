@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Color } from "../../COLORS/Colors";
 import TopSearchComp from "../../components/Reuse/TopSearchComp";
 import { WIDTH } from "../../utils/Dimension";
@@ -27,24 +27,72 @@ import { pageLogo, takaIcon } from "../../utils/DummyImgFile";
 import dataFetch from "../../api/dataFetch";
 import Wait from "../../components/Wait";
 import MatchProducts from "../../components/Reuse/MatchProducts";
+import { UserContext } from "../../context/UserContext";
+import axios from "axios";
+import { getSingleProduct } from "../../api/getSingleProduct";
 
-const ProductDetails = ({ route }) => {
+const ProductDetails = ({ route, navigation }) => {
   const { value } = route.params;
   const [wait, setWait] = useState(true);
+  const { user } = useContext(UserContext);
+  const [likes, setLikes] = useState([]);
+  const [imgIndex, setImgIndex] = useState(0);
+
+  const isAlreadyLiked = likes.filter((val) => val.likedBy == user.email);
 
   // data fetch from db
   const { loading, err, data } = UseFetch(
     `${ApiPoint}/product/similarproduct?categorie=${value?.categorie}`
   );
 
+  // same store data
   const { load, wrong, resData } = dataFetch(
     `${ApiPoint}/product/samestore?id=${value?.postedBy._id}`
   );
 
-  const [imgIndex, setImgIndex] = useState(0);
+  const LikePost = () => {
+    if (!user) {
+      return navigation.navigate("Profile");
+    }
+
+    if (isAlreadyLiked.length == 0) {
+      let val = [
+        ...likes,
+        {
+          likedBy: user.email,
+        },
+      ];
+
+      // let notifyVal = [
+      //   ...bloggerProfile?.notifications,
+      //   {
+      //     userEmail: user.email,
+      //     username: user.username,
+      //     type: "like",
+      //   },
+      // ];
+      likePost(val);
+      setLikes(val);
+    } else {
+      let val = likes.filter((like) => like.likedBy != user.email);
+      likePost(val);
+      setLikes(val);
+    }
+  };
+
+  const likePost = async (val) => {
+    try {
+      await axios.put(`${ApiPoint}/product/like/${value._id}`, val);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     setTimeout(() => {
+      getSingleProduct(`${ApiPoint}/product/${value._id}`).then((data) => {
+        setLikes(data.data.product.likes);
+      });
       setWait(false);
     }, 1500);
   }, [value]);
@@ -67,40 +115,51 @@ const ProductDetails = ({ route }) => {
         <>
           <ScrollView style={styles.contentWrapper}>
             <Image
-              source={{ uri: value.featuredImg[imgIndex] }}
+              source={{ uri: value?.featuredImg[imgIndex] }}
               style={styles.imgStyle}
             />
             <View style={styles.productDescWrapper}>
               <View style={styles.productDescContainer}>
                 <View style={styles.paddingHorizontal}>
-                  <Text style={styles.name}>{value.name}</Text>
+                  <Text style={styles.name}>{value?.name}</Text>
 
-                  <Text style={styles.description}>{value.description}</Text>
+                  <Text style={styles.description}>{value?.description}</Text>
                 </View>
                 <View style={styles.priceWrapper}>
                   <Image source={{ uri: takaIcon }} style={styles.takaIcon} />
-                  <Text style={styles.price}>{value.price}</Text>
+                  <Text style={styles.price}>{value?.price}</Text>
                 </View>
 
                 <View style={styles.ratingandSellContainer}>
                   <Fontisto name="star" color={"orange"} />
                   <Text style={styles.rating}>
-                    {value.rating.length} ({value.rating.length})
+                    {value.rating.length} ({value?.rating.length})
                   </Text>
 
                   <View style={[styles.flexStyle, styles.soldContainer]}>
                     <Ionicons name="chevron-forward-outline" size={18} />
                     <Text style={styles.likes}>Total Sold </Text>
-                    <Text style={styles.totalSell}>{value.totalSell}</Text>
+                    <Text style={styles.totalSell}>{value?.totalSell}</Text>
                   </View>
                   <View style={[styles.flexStyle, styles.soldContainer]}>
-                    <Ionicons name="heart-outline" size={18} />
-                    <Text style={styles.likes}>Likes {value.likes.length}</Text>
+                    <TouchableOpacity onPress={LikePost}>
+                      <Ionicons
+                        name="heart"
+                        size={19}
+                        color={
+                          isAlreadyLiked?.length == 0 ? "black" : Color.RED
+                        }
+                      />
+                    </TouchableOpacity>
+                    <Text style={styles.likes}>Likes {likes.length}</Text>
                   </View>
                 </View>
 
                 <View style={styles.askContainer}>
-                  <TouchableOpacity style={styles.wrapperstyle}>
+                  <TouchableOpacity
+                    style={styles.wrapperstyle}
+                    onPress={() => navigation.navigate("AskQuestion")}
+                  >
                     <View style={[styles.flexStyle, { flex: 1 }]}>
                       <Fontisto name="hipchat" size={16} />
                       <Text style={[styles.likes, { marginLeft: 5 }]}>
@@ -119,7 +178,7 @@ const ProductDetails = ({ route }) => {
                         style={styles.shopLogo}
                       />
                       <Text style={[styles.likes, styles.shopname]}>
-                        {value.postedBy.shopname}
+                        {value?.postedBy.shopname}
                       </Text>
                     </View>
                     <Ionicons name="chevron-forward-outline" size={18} />
@@ -130,7 +189,7 @@ const ProductDetails = ({ route }) => {
 
             <View style={styles.imgSliderWrapper}>
               <ProductImageSlider
-                data={value.featuredImg}
+                data={value?.featuredImg}
                 onPress={selectImg}
                 imgIndex={imgIndex}
               />
@@ -170,12 +229,10 @@ const BottomComp = () => {
         <Ionicons name="heart-outline" size={18} />
         <Text style={styles.storeText}>Favorite</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.alingItemStyle}>
-        <Fontisto name="hipchat" size={18} />
-        <Text style={styles.storeText}>Chat</Text>
-      </TouchableOpacity>
-      <ButtonComp text="Add To Cart" btnExtrastyle={styles.btnExtrastyle} />
-      <ButtonComp text="Buy Now" btnExtrastyle={styles.btnExtrastyle} />
+      <>
+        <ButtonComp text="Add To Cart" btnExtrastyle={styles.btnExtrastyle} />
+        <ButtonComp text="Buy Now" btnExtrastyle={styles.btnExtra2style} />
+      </>
     </View>
   );
 };
@@ -304,9 +361,14 @@ const styles = StyleSheet.create({
   },
   btnExtrastyle: {
     width: "28%",
+    marginRight: 15,
+  },
+  btnExtra2style: {
+    width: "28%",
   },
   alingItemStyle: {
     alignItems: "center",
+    flex: 1,
   },
   storeText: {
     fontSize: 12,

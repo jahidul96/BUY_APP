@@ -1,12 +1,14 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Color } from "../../COLORS/Colors";
 import { WIDTH } from "../../utils/Dimension";
 import { Input } from "./Reuseable";
 import { useNavigation } from "@react-navigation/native";
+import { UserContext } from "../../context/UserContext";
 
 const TopSearchComp = ({ noBack, extraInputStyle, name, cart, color }) => {
+  const { user } = useContext(UserContext);
   const navigation = useNavigation();
   return (
     <View style={styles.topInputWrapper}>
@@ -23,7 +25,7 @@ const TopSearchComp = ({ noBack, extraInputStyle, name, cart, color }) => {
       <View>
         {cart && (
           <View style={styles.cartCountContainer}>
-            <Text style={styles.cartText}>0</Text>
+            <Text style={styles.cartText}>{user?.cartItems.length}</Text>
           </View>
         )}
         <Ionicons name={name} size={27} color={color} />

@@ -9,6 +9,7 @@ import BottomNavigation from "./BottomNavigation";
 import Categories from "../screens/categorieScreen/Categories";
 import Register from "../auth/Register";
 import Login from "../auth/Login";
+import AskQuestion from "../screens/product/AskQuestion";
 
 const Stack = createNativeStackNavigator();
 
@@ -19,6 +20,7 @@ const Navigation = () => {
       <Stack.Screen name="SearchScreen" component={SearchScreen} />
       <Stack.Screen name="Categories" component={Categories} />
       <Stack.Screen name="ProductDetails" component={ProductDetails} />
+      <Stack.Screen name="AskQuestion" component={AskQuestion} />
       <Stack.Screen name="Register" component={Register} />
       <Stack.Screen name="Login" component={Login} />
     </Stack.Navigator>

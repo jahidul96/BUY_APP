@@ -5,7 +5,7 @@ const User = require("../models/userSchema");
 const bcrypt = require("bcrypt");
 
 router.post("/register", async (req, res, next) => {
-  console.log(req.body);
+  // console.log(req.body);
 
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
 

@@ -1,16 +1,20 @@
 import { Alert, StatusBar, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Color } from "../COLORS/Colors";
 import { ButtonComp, Input, TopComp } from "../components/Reuse/Reuseable";
 import axios from "axios";
 import { ApiPoint } from "../api/endPoint";
 import Loadder from "../components/Loadder";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { UserContext } from "../context/UserContext";
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [uploading, setUploading] = useState(false);
+  const { setUser } = useContext(UserContext);
+
+  // console.log("user", user);
 
   const goBackFunc = () => {
     navigation.navigate("Home");
@@ -30,6 +34,7 @@ const Login = ({ navigation }) => {
       // console.log(response.data);
 
       const value = response.data.user;
+      setUser(value);
       const jsonValue = JSON.stringify(value);
       await AsyncStorage.setItem("user", jsonValue);
       setUploading(false);
