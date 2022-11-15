@@ -44,11 +44,12 @@ export const NotifyComp = ({ text }) => (
   </View>
 );
 
-export const Input = ({ placeholder, extraInputStyle }) => {
+export const Input = ({ placeholder, extraInputStyle, value, setValue }) => {
   return (
     <TextInput
       placeholder={placeholder}
       style={[styles.inputStyle, extraInputStyle]}
+      onChangeText={(text) => setValue(text)}
     />
   );
 };

@@ -14,6 +14,21 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    phone: {
+      type: String,
+      required: true,
+    },
+    profileImg: {
+      type: String,
+      required: true,
+    },
+    newNotification: {
+      type: Boolean,
+      default: false,
+    },
+    notifications: Array,
+    favorites: Array,
+    cartItems: Array,
   },
   {
     timestamps: true,

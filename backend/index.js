@@ -18,7 +18,7 @@ const port = process.env.PORT || 5000;
 app.use(express.json());
 
 // router call middlewares!
-app.use(userHandler);
+app.use("/auth", userHandler);
 app.use("/seller", sellerAuthHandler);
 app.use("/product", productHandler);
 app.use("/sellrecord", recordHandler);

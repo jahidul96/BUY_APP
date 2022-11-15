@@ -18,13 +18,30 @@ import Products from "../../components/Products";
 import UseFetch from "../../api/useFetch";
 import { ApiPoint } from "../../api/endPoint";
 import TopSearchComp from "../../components/Reuse/TopSearchComp";
+import { getUserFromAsync } from "../../utils/LocalStorage";
+import { UserContext } from "../../context/UserContext";
 
 const HomeScreen = ({ navigation }) => {
+  const { user, setUser } = useContext(UserContext);
   const { loading, err, data } = UseFetch(`${ApiPoint}/product`);
 
   const goToCategories = (value) => {
     navigation.navigate("Categories", { value });
   };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      // do something
+      getUserFromAsync()
+        .then((data) => {
+          // console.log("asyncstorage data", data);
+          setUser(data);
+        })
+        .catch((err) => err);
+    });
+
+    return unsubscribe;
+  }, [navigation]);
   return (
     <View
       style={{

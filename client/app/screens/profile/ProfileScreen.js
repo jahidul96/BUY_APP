@@ -5,8 +5,10 @@ import {
   Text,
   View,
   TouchableOpacity,
+  Image,
+  Alert,
 } from "react-native";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import LoggedComp from "../../components/LoggedComp";
 import { UserContext } from "../../context/UserContext";
 import { Color } from "../../COLORS/Colors";
@@ -16,31 +18,47 @@ import ShoppingBag from "react-native-vector-icons/Feather";
 import HeartIcon from "react-native-vector-icons/Feather";
 import Percent from "react-native-vector-icons/Feather";
 import Credit from "react-native-vector-icons/Entypo";
+import { removeValueFromAsync } from "../../utils/LocalStorage";
+import Loadder from "../../components/Loadder";
 
 const ProfileScreen = () => {
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
+  const [loading, setLoading] = useState(false);
 
-  const email = "Jahidulislamakashroy96@gmail.com";
+  const logout = () => {
+    setLoading(true);
+    setTimeout(() => {
+      removeValueFromAsync();
+      setUser(null);
+      setLoading(false);
+      Alert.alert("Logout succefull!");
+    }, 1500);
+  };
 
   // console.log(user);
   return (
     <View style={styles.container}>
       <StatusBar barStyle={"light-content"} backgroundColor={Color.RED} />
+      {loading && <Loadder />}
       {user ? (
         <ScrollView contentContainerStyle={styles.mainWrapper}>
           <View style={styles.profilemainWrapper}>
             <View>
-              <Text style={styles.nameText}>Jahidul islam</Text>
-              <Text style={styles.email}>{email}</Text>
-              <Text style={styles.phnText}>+880 1881383269</Text>
+              <Text style={styles.nameText}>{user?.username}</Text>
+              <Text style={styles.email}>{user?.email}</Text>
+              <Text style={styles.phnText}>{user?.phone}</Text>
               <TouchableOpacity>
                 <Text style={styles.editText}>Edit Profile</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.profieImgWrapper}>
-              <CameraIcon name="camera-off" size={35} />
+              <Image
+                source={{ uri: user.profileImg }}
+                style={{ width: "100%", height: "100%", borderRadius: 100 }}
+              />
             </View>
           </View>
+
           {/* app activity */}
 
           <View style={styles.activityWrapper}>
@@ -55,28 +73,16 @@ const ProfileScreen = () => {
               text="Shopping"
             />
             <ActivityComp Icon={HeartIcon} name="heart" text="Favourites" />
-            <ActivityComp Icon={Percent} name="percent" text="Offers" />
+
             <ActivityComp
               Icon={Credit}
               name="creative-cloud"
               text="Transiction's"
             />
           </View>
-          {/* terms & conditions */}
 
-          <View style={styles.termsWrapper}>
-            <TouchableOpacity>
-              <Text style={styles.termsText}>Fags</Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Text style={styles.termsText}>T&c</Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Text style={styles.termsText}>Privacy Policy</Text>
-            </TouchableOpacity>
-          </View>
           {/* logout */}
-          <TouchableOpacity style={styles.logoutBtn}>
+          <TouchableOpacity style={styles.logoutBtn} onPress={logout}>
             <Text style={styles.termsText}>LogOut</Text>
           </TouchableOpacity>
         </ScrollView>
@@ -123,9 +129,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     marginBottom: 3,
   },
-  email: {
-    width: "90%",
-  },
+  email: {},
   phnText: {
     marginVertical: 4,
   },
@@ -135,8 +139,8 @@ const styles = StyleSheet.create({
   },
 
   profieImgWrapper: {
-    width: 70,
-    height: 70,
+    width: 60,
+    height: 60,
     borderColor: Color.GRAY,
     borderWidth: 1,
     borderRadius: 100 / 2,
