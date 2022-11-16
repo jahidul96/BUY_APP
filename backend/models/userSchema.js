@@ -33,7 +33,12 @@ const userSchema = new mongoose.Schema(
         ref: "Product",
       },
     ],
-    cartItems: Array,
+    cartItems: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
   },
   {
     timestamps: true,

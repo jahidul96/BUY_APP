@@ -29,7 +29,7 @@ const ProfileScreen = () => {
     setLoading(true);
     setTimeout(() => {
       removeValueFromAsync();
-      setUser(null);
+      setAuthUser(null);
       setLoading(false);
       Alert.alert("Logout succefull!");
     }, 1500);

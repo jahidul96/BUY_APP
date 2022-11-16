@@ -47,6 +47,31 @@ router.get("/similarproduct", async (req, res, next) => {
   }
 });
 
+// get search product
+
+router.get("/search", async (req, res, next) => {
+  const { name } = req.query;
+
+  try {
+    const products = await Product.find({
+      name: { $regex: name, $options: "i" },
+    })
+      .populate("postedBy", {
+        password: 0,
+      })
+      .sort({ createdAt: -1 })
+      .limit(10);
+
+    res.status(200).json({
+      status: "succes",
+      totleProducts: products.length,
+      products,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 // same store product
 router.get("/samestore", async (req, res, next) => {
   const { id } = req.query;

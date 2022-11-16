@@ -3,11 +3,21 @@ import React, { useContext } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Color } from "../../COLORS/Colors";
 import { WIDTH } from "../../utils/Dimension";
-import { Input } from "./Reuseable";
+import { ButtonComp, Input } from "./Reuseable";
 import { useNavigation } from "@react-navigation/native";
 import { UserContext } from "../../context/UserContext";
 
-const TopSearchComp = ({ noBack, extraInputStyle, name, cart, color }) => {
+const TopSearchComp = ({
+  noBack,
+  extraInputStyle,
+  name,
+  cart,
+  color,
+  onPress,
+  btnOnpress,
+  search,
+  setValue,
+}) => {
   const { auth } = useContext(UserContext);
   const navigation = useNavigation();
   return (
@@ -21,15 +31,27 @@ const TopSearchComp = ({ noBack, extraInputStyle, name, cart, color }) => {
         />
       )}
 
-      <Input placeholder="Search.." extraInputStyle={extraInputStyle} />
-      <View>
-        {cart && auth ? (
-          <View style={styles.cartCountContainer}>
-            <Text style={styles.cartText}>{auth?.cartItems.length}</Text>
-          </View>
-        ) : null}
-        <Ionicons name={name} size={27} color={color} />
-      </View>
+      <Input
+        placeholder="Search.."
+        extraInputStyle={extraInputStyle}
+        setValue={setValue}
+      />
+      {search ? (
+        <ButtonComp
+          btnExtrastyle={styles.btnExtrastyle}
+          text="search"
+          onPress={btnOnpress}
+        />
+      ) : (
+        <View>
+          {cart && auth ? (
+            <View style={styles.cartCountContainer}>
+              <Text style={styles.cartText}>{auth?.cartItems.length}</Text>
+            </View>
+          ) : null}
+          <Ionicons name={name} size={27} color={color} onPress={onPress} />
+        </View>
+      )}
     </View>
   );
 };
@@ -65,5 +87,10 @@ const styles = StyleSheet.create({
     color: Color.WHITE,
     fontSize: 10,
     fontWeight: "700",
+  },
+  btnExtrastyle: {
+    width: "23%",
+    height: 33,
+    borderRadius: 3,
   },
 });

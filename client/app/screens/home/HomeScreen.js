@@ -72,6 +72,7 @@ const HomeScreen = ({ navigation }) => {
             extraInputStyle={styles.extraInputStyle}
             name="person-circle"
             color={Color.WHITE}
+            onPress={() => navigation.navigate("Profile")}
           />
 
           <ScrollView style={styles.root}>

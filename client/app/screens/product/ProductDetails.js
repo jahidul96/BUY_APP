@@ -166,6 +166,7 @@ const ProductDetails = ({ route, navigation }) => {
         extraInputStyle={styles.extraInputStyle}
         cart
         color={Color.RED}
+        onPress={() => navigation.navigate("Cart")}
       />
       {wait ? (
         // loadder
