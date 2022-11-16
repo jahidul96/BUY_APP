@@ -8,7 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 import { UserContext } from "../../context/UserContext";
 
 const TopSearchComp = ({ noBack, extraInputStyle, name, cart, color }) => {
-  const { user } = useContext(UserContext);
+  const { auth } = useContext(UserContext);
   const navigation = useNavigation();
   return (
     <View style={styles.topInputWrapper}>
@@ -23,9 +23,9 @@ const TopSearchComp = ({ noBack, extraInputStyle, name, cart, color }) => {
 
       <Input placeholder="Search.." extraInputStyle={extraInputStyle} />
       <View>
-        {cart && user ? (
+        {cart && auth ? (
           <View style={styles.cartCountContainer}>
-            <Text style={styles.cartText}>{user?.cartItems.length}</Text>
+            <Text style={styles.cartText}>{auth?.cartItems.length}</Text>
           </View>
         ) : null}
         <Ionicons name={name} size={27} color={color} />

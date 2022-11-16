@@ -4,12 +4,11 @@ import { UserContext } from "../../context/UserContext";
 import LoggedComp from "../../components/LoggedComp";
 
 const AskQuestion = () => {
-  const { user } = useContext(UserContext);
+  const { auth } = useContext(UserContext);
 
-  //   console.log("use ace nake nai!!", user);
   return (
     <View style={styles.root}>
-      {user ? (
+      {auth ? (
         <View>
           <Text>AskQuestion</Text>
         </View>

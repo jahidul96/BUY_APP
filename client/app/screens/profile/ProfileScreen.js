@@ -22,7 +22,7 @@ import { removeValueFromAsync } from "../../utils/LocalStorage";
 import Loadder from "../../components/Loadder";
 
 const ProfileScreen = () => {
-  const { user, setUser } = useContext(UserContext);
+  const { auth, setAuthUser } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
 
   const logout = () => {
@@ -40,20 +40,20 @@ const ProfileScreen = () => {
     <View style={styles.container}>
       <StatusBar barStyle={"light-content"} backgroundColor={Color.RED} />
       {loading && <Loadder />}
-      {user ? (
+      {auth ? (
         <ScrollView contentContainerStyle={styles.mainWrapper}>
           <View style={styles.profilemainWrapper}>
             <View>
-              <Text style={styles.nameText}>{user?.username}</Text>
-              <Text style={styles.email}>{user?.email}</Text>
-              <Text style={styles.phnText}>{user?.phone}</Text>
+              <Text style={styles.nameText}>{auth?.username}</Text>
+              <Text style={styles.email}>{auth?.email}</Text>
+              <Text style={styles.phnText}>{auth?.phone}</Text>
               <TouchableOpacity>
                 <Text style={styles.editText}>Edit Profile</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.profieImgWrapper}>
               <Image
-                source={{ uri: user.profileImg }}
+                source={{ uri: auth.profileImg }}
                 style={{ width: "100%", height: "100%", borderRadius: 100 }}
               />
             </View>

@@ -4,6 +4,7 @@ const User = require("../models/userSchema");
 
 const bcrypt = require("bcrypt");
 
+// create user
 router.post("/register", async (req, res, next) => {
   // console.log(req.body);
 
@@ -34,6 +35,7 @@ router.post("/register", async (req, res, next) => {
   }
 });
 
+// login user
 router.post("/login", async (req, res, next) => {
   const { email, password } = req.body;
   try {
@@ -60,6 +62,24 @@ router.post("/login", async (req, res, next) => {
     next(error);
   }
 });
+
+// get a user
+
+router.get("/user/:id", async (req, res, next) => {
+  const id = req.params.id;
+  try {
+    const user = await User.findById({ _id: id });
+
+    res.status(200).json({
+      status: "succes",
+      user,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// add and remove from favorites
 
 router.put("/favorites/:id", async (req, res, next) => {
   const id = req.params.id;

@@ -20,24 +20,38 @@ import { ApiPoint } from "../../api/endPoint";
 import TopSearchComp from "../../components/Reuse/TopSearchComp";
 import { getUserFromAsync } from "../../utils/LocalStorage";
 import { UserContext } from "../../context/UserContext";
+import { MainUserContext } from "../../context/MainUserContext";
+import Loadder from "../../components/Loadder";
+import { getSingleUser } from "../../api/userDataApi";
 
 const HomeScreen = ({ navigation }) => {
-  const { user, setUser } = useContext(UserContext);
+  const { setAuthUser } = useContext(UserContext);
+  const { updatedUser, setUpdatedUser } = useContext(MainUserContext);
   const { loading, err, data } = UseFetch(`${ApiPoint}/product`);
+  const [wait, setWait] = useState(true);
 
   const goToCategories = (value) => {
     navigation.navigate("Categories", { value });
   };
 
+  // console.log("updatedUser", updatedUser);
+
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
-      // do something
-      getUserFromAsync()
-        .then((data) => {
-          // console.log("asyncstorage data", data);
-          setUser(data);
-        })
-        .catch((err) => err);
+      setTimeout(() => {
+        getUserFromAsync()
+          .then((data) => {
+            setAuthUser(data);
+            getSingleUser(`${ApiPoint}/auth/user/${data._id}`)
+              .then((data) => {
+                setUpdatedUser(data.data.user);
+              })
+              .catch((err) => console.log(err));
+          })
+          .catch((err) => err);
+
+        setWait(false);
+      }, 1500);
     });
 
     return unsubscribe;
@@ -49,30 +63,36 @@ const HomeScreen = ({ navigation }) => {
       }}
     >
       <StatusBar barStyle={"light-content"} backgroundColor={Color.RED} />
-      <TopSearchComp
-        noBack={true}
-        extraInputStyle={styles.extraInputStyle}
-        name="person-circle"
-        color={Color.WHITE}
-      />
+      {wait ? (
+        <Loadder />
+      ) : (
+        <>
+          <TopSearchComp
+            noBack={true}
+            extraInputStyle={styles.extraInputStyle}
+            name="person-circle"
+            color={Color.WHITE}
+          />
 
-      <ScrollView style={styles.root}>
-        <SliderCarousel />
-        <ProductCategorie onPress={goToCategories} />
-        <View style={styles.productWrapper}>
-          <Text style={styles.titleText}>Featured Product's</Text>
-          {loading ? (
-            <Lodder />
-          ) : err ? (
-            <View style={styles.errorStyle}>
-              <Text>Something went wrong!</Text>
-              <Text>{err?.message}</Text>
+          <ScrollView style={styles.root}>
+            <SliderCarousel />
+            <ProductCategorie onPress={goToCategories} />
+            <View style={styles.productWrapper}>
+              <Text style={styles.titleText}>Featured Product's</Text>
+              {loading ? (
+                <Lodder />
+              ) : err ? (
+                <View style={styles.errorStyle}>
+                  <Text>Something went wrong!</Text>
+                  <Text>{err?.message}</Text>
+                </View>
+              ) : (
+                <Products ProductsData={data?.products} />
+              )}
             </View>
-          ) : (
-            <Products ProductsData={data?.products} />
-          )}
-        </View>
-      </ScrollView>
+          </ScrollView>
+        </>
+      )}
     </View>
   );
 };

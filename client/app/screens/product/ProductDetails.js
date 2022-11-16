@@ -31,19 +31,24 @@ import { UserContext } from "../../context/UserContext";
 import axios from "axios";
 import { getSingleProduct } from "../../api/getSingleProduct";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { MainUserContext } from "../../context/MainUserContext";
 
 const ProductDetails = ({ route, navigation }) => {
   const { value } = route.params;
   const [wait, setWait] = useState(true);
-  const { user, setUser } = useContext(UserContext);
+  const { updatedUser, setUpdatedUser } = useContext(MainUserContext);
   const [likes, setLikes] = useState([]);
-  const [favorites, setFavorites] = useState(user?.favorites);
+  const [favorites, setFavorites] = useState(
+    updatedUser == null ? [] : updatedUser?.favorites
+  );
   const [imgIndex, setImgIndex] = useState(0);
 
-  const isAlreadyLiked = likes.filter((val) => val.likedBy == user?.email);
-  const isAlreadyFavorites = favorites.filter((fav) => fav == value._id);
+  const isAlreadyLiked = likes.filter(
+    (val) => val.likedBy == updatedUser?.email
+  );
+  const isAlreadyFavorites = favorites?.filter((fav) => fav == value._id);
 
-  // console.log("user Favorites", isAlreadyFaorites);
+  console.log("user Favorites", isAlreadyFavorites);
 
   // data fetch from db
   const { loading, err, data } = UseFetch(
@@ -58,7 +63,7 @@ const ProductDetails = ({ route, navigation }) => {
   // like post button
 
   const LikePost = () => {
-    if (!user) {
+    if (!updatedUser) {
       return navigation.navigate("Profile");
     }
 
@@ -66,7 +71,7 @@ const ProductDetails = ({ route, navigation }) => {
       let val = [
         ...likes,
         {
-          likedBy: user?.email,
+          likedBy: updatedUser?.email,
         },
       ];
 
@@ -81,7 +86,7 @@ const ProductDetails = ({ route, navigation }) => {
       likePost(val);
       setLikes(val);
     } else {
-      let val = likes.filter((like) => like.likedBy != user?.email);
+      let val = likes.filter((like) => like.likedBy != updatedUser?.email);
       likePost(val);
       setLikes(val);
     }
@@ -97,40 +102,41 @@ const ProductDetails = ({ route, navigation }) => {
 
   // add to cart button
   const addToCart = async () => {
-    if (!user) {
+    if (!updatedUser) {
       return navigation.navigate("Profile");
     }
   };
 
   // buynow button
   const buyNow = async () => {
-    if (!user) {
+    if (!updatedUser) {
       return navigation.navigate("Profile");
     }
   };
 
   // adto favorites button
   const addtoFav = async () => {
+    if (!updatedUser) {
+      return navigation.navigate("Profile");
+    }
     if (isAlreadyFavorites.length == 0) {
       const val = [...favorites, value?._id];
 
       console.log(val);
       setFavorites(val);
-      addFavToDb(val, user?._id);
+      addFavToDb(val, updatedUser?._id);
     } else {
       const val = favorites.filter((fav) => fav != value?._id);
       console.log(val);
       setFavorites(val);
-      addFavToDb(val, user._id);
+      addFavToDb(val, updatedUser._id);
     }
   };
 
   const addFavToDb = async (val, id) => {
     try {
       const res = await axios.put(`${ApiPoint}/auth/favorites/${id}`, val);
-      const jsonValue = JSON.stringify(res.data.user);
-      await AsyncStorage.setItem("user", jsonValue);
-      setUser(res.data.user);
+      // setUpdatedUser(res.data.user);
       setFavorites(res.data.user.favorites);
     } catch (error) {
       console.log(error);

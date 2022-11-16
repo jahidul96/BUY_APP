@@ -5,11 +5,11 @@ import { UserContext } from "../../context/UserContext";
 import { Color } from "../../COLORS/Colors";
 
 const Favorite = () => {
-  const { user } = useContext(UserContext);
+  const { auth } = useContext(UserContext);
   return (
     <View style={styles.container}>
       <StatusBar barStyle={"light-content"} backgroundColor={Color.RED} />
-      {user ? (
+      {auth ? (
         <ScrollView>
           <Text>Favorite's</Text>
         </ScrollView>

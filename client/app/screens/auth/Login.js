@@ -15,7 +15,7 @@ const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [uploading, setUploading] = useState(false);
-  const { setUser } = useContext(UserContext);
+  const { auth, setAuthUser } = useContext(UserContext);
 
   // console.log("user", user);
 
@@ -37,7 +37,7 @@ const Login = ({ navigation }) => {
       // console.log(response.data);
 
       const value = response.data.user;
-      setUser(value);
+      setAuthUser(value);
       const jsonValue = JSON.stringify(value);
       await AsyncStorage.setItem("user", jsonValue);
       setUploading(false);
