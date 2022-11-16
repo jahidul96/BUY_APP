@@ -20,9 +20,12 @@ import Percent from "react-native-vector-icons/Feather";
 import Credit from "react-native-vector-icons/Entypo";
 import { removeValueFromAsync } from "../../utils/LocalStorage";
 import Loadder from "../../components/Loadder";
+import { MainUserContext } from "../../context/MainUserContext";
 
 const ProfileScreen = () => {
   const { auth, setAuthUser } = useContext(UserContext);
+  const { updatedUser, setUpdatedUser } = useContext(MainUserContext);
+
   const [loading, setLoading] = useState(false);
 
   const logout = () => {
@@ -30,6 +33,7 @@ const ProfileScreen = () => {
     setTimeout(() => {
       removeValueFromAsync();
       setAuthUser(null);
+      setUpdatedUser(null);
       setLoading(false);
       Alert.alert("Logout succefull!");
     }, 1500);
@@ -40,20 +44,20 @@ const ProfileScreen = () => {
     <View style={styles.container}>
       <StatusBar barStyle={"light-content"} backgroundColor={Color.RED} />
       {loading && <Loadder />}
-      {auth ? (
+      {updatedUser ? (
         <ScrollView contentContainerStyle={styles.mainWrapper}>
           <View style={styles.profilemainWrapper}>
             <View>
-              <Text style={styles.nameText}>{auth?.username}</Text>
-              <Text style={styles.email}>{auth?.email}</Text>
-              <Text style={styles.phnText}>{auth?.phone}</Text>
+              <Text style={styles.nameText}>{updatedUser?.username}</Text>
+              <Text style={styles.email}>{updatedUser?.email}</Text>
+              <Text style={styles.phnText}>{updatedUser?.phone}</Text>
               <TouchableOpacity>
                 <Text style={styles.editText}>Edit Profile</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.profieImgWrapper}>
               <Image
-                source={{ uri: auth.profileImg }}
+                source={{ uri: updatedUser.profileImg }}
                 style={{ width: "100%", height: "100%", borderRadius: 100 }}
               />
             </View>

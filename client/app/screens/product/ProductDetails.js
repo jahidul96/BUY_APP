@@ -48,8 +48,6 @@ const ProductDetails = ({ route, navigation }) => {
   );
   const isAlreadyFavorites = favorites?.filter((fav) => fav == value._id);
 
-  console.log("user Favorites", isAlreadyFavorites);
-
   // data fetch from db
   const { loading, err, data } = UseFetch(
     `${ApiPoint}/product/similarproduct?categorie=${value?.categorie}`
@@ -122,12 +120,11 @@ const ProductDetails = ({ route, navigation }) => {
     if (isAlreadyFavorites.length == 0) {
       const val = [...favorites, value?._id];
 
-      console.log(val);
       setFavorites(val);
       addFavToDb(val, updatedUser?._id);
     } else {
       const val = favorites.filter((fav) => fav != value?._id);
-      console.log(val);
+
       setFavorites(val);
       addFavToDb(val, updatedUser._id);
     }
@@ -151,6 +148,7 @@ const ProductDetails = ({ route, navigation }) => {
       });
       setWait(false);
     }, 1500);
+    setImgIndex(0);
   }, [value]);
 
   const selectImg = (i) => {

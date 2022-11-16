@@ -6,7 +6,6 @@ import Cart from "../screens/cart/Cart";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Color } from "../COLORS/Colors";
 import HomeScreen from "../screens/home/HomeScreen";
-import Favorite from "../screens/favorite/Favorite";
 import SearchScreen from "../screens/search/SearchScreen";
 
 const Tab = createBottomTabNavigator();
