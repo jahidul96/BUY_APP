@@ -7,6 +7,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { Color } from "../COLORS/Colors";
 import HomeScreen from "../screens/home/HomeScreen";
 import Favorite from "../screens/favorite/Favorite";
+import SearchScreen from "../screens/search/SearchScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -35,12 +36,12 @@ const BottomNavigation = () => {
         }}
       />
       <Tab.Screen
-        name="Favorite"
-        component={Favorite}
+        name="Search"
+        component={SearchScreen}
         options={{
-          tabBarLabel: "Favorite",
+          tabBarLabel: "Search",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="heart" color={color} size={22} />
+            <Ionicons name="search" color={color} size={22} />
           ),
         }}
       />

@@ -30,15 +30,20 @@ import MatchProducts from "../../components/Reuse/MatchProducts";
 import { UserContext } from "../../context/UserContext";
 import axios from "axios";
 import { getSingleProduct } from "../../api/getSingleProduct";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ProductDetails = ({ route, navigation }) => {
   const { value } = route.params;
   const [wait, setWait] = useState(true);
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const [likes, setLikes] = useState([]);
+  const [favorites, setFavorites] = useState(user?.favorites);
   const [imgIndex, setImgIndex] = useState(0);
 
-  const isAlreadyLiked = likes.filter((val) => val.likedBy == user.email);
+  const isAlreadyLiked = likes.filter((val) => val.likedBy == user?.email);
+  const isAlreadyFavorites = favorites.filter((fav) => fav == value._id);
+
+  // console.log("user Favorites", isAlreadyFaorites);
 
   // data fetch from db
   const { loading, err, data } = UseFetch(
@@ -50,6 +55,8 @@ const ProductDetails = ({ route, navigation }) => {
     `${ApiPoint}/product/samestore?id=${value?.postedBy._id}`
   );
 
+  // like post button
+
   const LikePost = () => {
     if (!user) {
       return navigation.navigate("Profile");
@@ -59,7 +66,7 @@ const ProductDetails = ({ route, navigation }) => {
       let val = [
         ...likes,
         {
-          likedBy: user.email,
+          likedBy: user?.email,
         },
       ];
 
@@ -74,7 +81,7 @@ const ProductDetails = ({ route, navigation }) => {
       likePost(val);
       setLikes(val);
     } else {
-      let val = likes.filter((like) => like.likedBy != user.email);
+      let val = likes.filter((like) => like.likedBy != user?.email);
       likePost(val);
       setLikes(val);
     }
@@ -88,6 +95,49 @@ const ProductDetails = ({ route, navigation }) => {
     }
   };
 
+  // add to cart button
+  const addToCart = async () => {
+    if (!user) {
+      return navigation.navigate("Profile");
+    }
+  };
+
+  // buynow button
+  const buyNow = async () => {
+    if (!user) {
+      return navigation.navigate("Profile");
+    }
+  };
+
+  // adto favorites button
+  const addtoFav = async () => {
+    if (isAlreadyFavorites.length == 0) {
+      const val = [...favorites, value?._id];
+
+      console.log(val);
+      setFavorites(val);
+      addFavToDb(val, user?._id);
+    } else {
+      const val = favorites.filter((fav) => fav != value?._id);
+      console.log(val);
+      setFavorites(val);
+      addFavToDb(val, user._id);
+    }
+  };
+
+  const addFavToDb = async (val, id) => {
+    try {
+      const res = await axios.put(`${ApiPoint}/auth/favorites/${id}`, val);
+      const jsonValue = JSON.stringify(res.data.user);
+      await AsyncStorage.setItem("user", jsonValue);
+      setUser(res.data.user);
+      setFavorites(res.data.user.favorites);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // api and some data call
   useEffect(() => {
     setTimeout(() => {
       getSingleProduct(`${ApiPoint}/product/${value._id}`).then((data) => {
@@ -103,6 +153,8 @@ const ProductDetails = ({ route, navigation }) => {
   return (
     <View style={styles.container}>
       <StatusBar barStyle={"light-content"} backgroundColor={Color.RED} />
+
+      {/* top position comp! */}
       <TopSearchComp
         name="cart-outline"
         extraInputStyle={styles.extraInputStyle}
@@ -110,14 +162,18 @@ const ProductDetails = ({ route, navigation }) => {
         color={Color.RED}
       />
       {wait ? (
+        // loadder
         <Wait />
       ) : (
         <>
           <ScrollView style={styles.contentWrapper}>
+            {/* product featured image */}
             <Image
               source={{ uri: value?.featuredImg[imgIndex] }}
               style={styles.imgStyle}
             />
+
+            {/* top product name, desc, price  */}
             <View style={styles.productDescWrapper}>
               <View style={styles.productDescContainer}>
                 <View style={styles.paddingHorizontal}>
@@ -130,12 +186,12 @@ const ProductDetails = ({ route, navigation }) => {
                   <Text style={styles.price}>{value?.price}</Text>
                 </View>
 
+                {/* like rating and sell count  */}
                 <View style={styles.ratingandSellContainer}>
                   <Fontisto name="star" color={"orange"} />
                   <Text style={styles.rating}>
                     {value.rating.length} ({value?.rating.length})
                   </Text>
-
                   <View style={[styles.flexStyle, styles.soldContainer]}>
                     <Ionicons name="chevron-forward-outline" size={18} />
                     <Text style={styles.likes}>Total Sold </Text>
@@ -155,6 +211,7 @@ const ProductDetails = ({ route, navigation }) => {
                   </View>
                 </View>
 
+                {/* ask question and comment button */}
                 <View style={styles.askContainer}>
                   <TouchableOpacity
                     style={styles.wrapperstyle}
@@ -169,6 +226,8 @@ const ProductDetails = ({ route, navigation }) => {
                     <Ionicons name="chevron-forward-outline" size={18} />
                   </TouchableOpacity>
                 </View>
+
+                {/* shopname navigation button */}
 
                 <View style={styles.askContainer}>
                   <TouchableOpacity style={styles.wrapperstyle}>
@@ -187,6 +246,7 @@ const ProductDetails = ({ route, navigation }) => {
               </View>
             </View>
 
+            {/* image slider */}
             <View style={styles.imgSliderWrapper}>
               <ProductImageSlider
                 data={value?.featuredImg}
@@ -195,9 +255,12 @@ const ProductDetails = ({ route, navigation }) => {
               />
             </View>
 
+            {/* reviews */}
             <View style={styles.imgSliderWrapper}>
               <Text>Reviews...</Text>
             </View>
+
+            {/* similar categories product */}
             <Text style={styles.titleText}>Similar Product's</Text>
             <MatchProducts
               loading={loading}
@@ -205,6 +268,7 @@ const ProductDetails = ({ route, navigation }) => {
               products={data?.products}
             />
 
+            {/* same store products */}
             <Text style={styles.titleText}>From Same Store</Text>
             <MatchProducts
               loading={load}
@@ -213,7 +277,13 @@ const ProductDetails = ({ route, navigation }) => {
             />
           </ScrollView>
 
-          <BottomComp />
+          {/* bottom comp */}
+          <BottomComp
+            addToCart={addToCart}
+            buyNow={buyNow}
+            isAlreadyFavorites={isAlreadyFavorites}
+            addtoFav={addtoFav}
+          />
         </>
       )}
     </View>
@@ -222,16 +292,28 @@ const ProductDetails = ({ route, navigation }) => {
 
 export default ProductDetails;
 
-const BottomComp = () => {
+const BottomComp = ({ addToCart, buyNow, isAlreadyFavorites, addtoFav }) => {
   return (
     <View style={styles.BottomContainer}>
-      <TouchableOpacity style={styles.alingItemStyle}>
-        <Ionicons name="heart-outline" size={18} />
+      <TouchableOpacity style={styles.alingItemStyle} onPress={addtoFav}>
+        <Ionicons
+          name="heart"
+          size={18}
+          color={isAlreadyFavorites?.length == 0 ? "black" : Color.RED}
+        />
         <Text style={styles.storeText}>Favorite</Text>
       </TouchableOpacity>
       <>
-        <ButtonComp text="Add To Cart" btnExtrastyle={styles.btnExtrastyle} />
-        <ButtonComp text="Buy Now" btnExtrastyle={styles.btnExtra2style} />
+        <ButtonComp
+          text="Add To Cart"
+          btnExtrastyle={styles.btnExtrastyle}
+          onPress={addToCart}
+        />
+        <ButtonComp
+          text="Buy Now"
+          btnExtrastyle={styles.btnExtra2style}
+          onPress={buyNow}
+        />
       </>
     </View>
   );

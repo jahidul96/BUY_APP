@@ -1,12 +1,15 @@
 import { Alert, StatusBar, StyleSheet, Text, View } from "react-native";
 import React, { useContext, useState } from "react";
-import { Color } from "../COLORS/Colors";
-import { ButtonComp, Input, TopComp } from "../components/Reuse/Reuseable";
+
 import axios from "axios";
-import { ApiPoint } from "../api/endPoint";
-import Loadder from "../components/Loadder";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { UserContext } from "../context/UserContext";
+
+import { Color } from "../../COLORS/Colors";
+import { UserContext } from "../../context/UserContext";
+import Loadder from "../../components/Loadder";
+import { ApiPoint } from "../../api/endPoint";
+import { ButtonComp, Input, TopComp } from "../../components/Reuse/Reuseable";
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");

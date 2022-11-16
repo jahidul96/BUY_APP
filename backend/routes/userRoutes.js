@@ -61,4 +61,27 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
+router.put("/favorites/:id", async (req, res, next) => {
+  const id = req.params.id;
+
+  try {
+    const user = await User.findByIdAndUpdate(
+      { _id: id },
+      {
+        $set: {
+          favorites: req.body,
+        },
+      },
+      { new: true }
+    );
+
+    res.status(201).json({
+      status: "succesfull",
+      user,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;

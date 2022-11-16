@@ -7,9 +7,10 @@ import ProductDetails from "../screens/product/ProductDetails";
 import SearchScreen from "../screens/search/SearchScreen";
 import BottomNavigation from "./BottomNavigation";
 import Categories from "../screens/categorieScreen/Categories";
-import Register from "../auth/Register";
-import Login from "../auth/Login";
+
 import AskQuestion from "../screens/product/AskQuestion";
+import Register from "../screens/auth/Register";
+import Login from "../screens/auth/Login";
 
 const Stack = createNativeStackNavigator();
 

@@ -23,11 +23,11 @@ const TopSearchComp = ({ noBack, extraInputStyle, name, cart, color }) => {
 
       <Input placeholder="Search.." extraInputStyle={extraInputStyle} />
       <View>
-        {cart && (
+        {cart && user ? (
           <View style={styles.cartCountContainer}>
             <Text style={styles.cartText}>{user?.cartItems.length}</Text>
           </View>
-        )}
+        ) : null}
         <Ionicons name={name} size={27} color={color} />
       </View>
     </View>

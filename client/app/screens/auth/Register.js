@@ -10,15 +10,17 @@ import {
   View,
 } from "react-native";
 import React, { useState } from "react";
-import { Color } from "../COLORS/Colors";
-import { ButtonComp, Input, TopComp } from "../components/Reuse/Reuseable";
+import { Color } from "../../COLORS/Colors";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import * as ImagePicker from "expo-image-picker";
-import Loadder from "../components/Loadder";
-import { uploadFileToStorage } from "../firebase/FBUpload";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ApiPoint } from "../api/endPoint";
+
 import axios from "axios";
+import { ApiPoint } from "../../api/endPoint";
+import Loadder from "../../components/Loadder";
+import { ButtonComp, Input, TopComp } from "../../components/Reuse/Reuseable";
+import { uploadFileToStorage } from "../../firebase/FBUpload";
 
 const Register = ({ navigation }) => {
   const [username, setUsername] = useState("");

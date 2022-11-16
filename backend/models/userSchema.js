@@ -27,7 +27,12 @@ const userSchema = new mongoose.Schema(
       default: false,
     },
     notifications: Array,
-    favorites: Array,
+    favorites: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
     cartItems: Array,
   },
   {
