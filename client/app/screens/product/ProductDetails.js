@@ -32,6 +32,8 @@ import axios from "axios";
 import { getSingleProduct } from "../../api/getSingleProduct";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MainUserContext } from "../../context/MainUserContext";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../redux/cartSlice";
 
 const ProductDetails = ({ route, navigation }) => {
   const { value } = route.params;
@@ -42,10 +44,14 @@ const ProductDetails = ({ route, navigation }) => {
     updatedUser == null ? [] : updatedUser?.favorites
   );
   const [imgIndex, setImgIndex] = useState(0);
+  const dispatch = useDispatch();
 
+  // check already liked or not
   const isAlreadyLiked = likes.filter(
     (val) => val.likedBy == updatedUser?.email
   );
+
+  // check already favorite or not
   const isAlreadyFavorites = favorites?.filter((fav) => fav == value._id);
 
   // data fetch from db
@@ -99,10 +105,11 @@ const ProductDetails = ({ route, navigation }) => {
   };
 
   // add to cart button
-  const addToCart = async () => {
+  const addProduct = async () => {
     if (!updatedUser) {
       return navigation.navigate("Profile");
     }
+    dispatch(addToCart(value));
   };
 
   // buynow button
@@ -151,6 +158,7 @@ const ProductDetails = ({ route, navigation }) => {
     setImgIndex(0);
   }, [value]);
 
+  // select image and update func
   const selectImg = (i) => {
     setImgIndex(i);
   };
@@ -284,7 +292,7 @@ const ProductDetails = ({ route, navigation }) => {
 
           {/* bottom comp */}
           <BottomComp
-            addToCart={addToCart}
+            addProduct={addProduct}
             buyNow={buyNow}
             isAlreadyFavorites={isAlreadyFavorites}
             addtoFav={addtoFav}
@@ -297,7 +305,7 @@ const ProductDetails = ({ route, navigation }) => {
 
 export default ProductDetails;
 
-const BottomComp = ({ addToCart, buyNow, isAlreadyFavorites, addtoFav }) => {
+const BottomComp = ({ addProduct, buyNow, isAlreadyFavorites, addtoFav }) => {
   return (
     <View style={styles.BottomContainer}>
       <TouchableOpacity style={styles.alingItemStyle} onPress={addtoFav}>
@@ -312,7 +320,7 @@ const BottomComp = ({ addToCart, buyNow, isAlreadyFavorites, addtoFav }) => {
         <ButtonComp
           text="Add To Cart"
           btnExtrastyle={styles.btnExtrastyle}
-          onPress={addToCart}
+          onPress={addProduct}
         />
         <ButtonComp
           text="Buy Now"

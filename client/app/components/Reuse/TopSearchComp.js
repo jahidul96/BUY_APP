@@ -6,6 +6,7 @@ import { WIDTH } from "../../utils/Dimension";
 import { ButtonComp, Input } from "./Reuseable";
 import { useNavigation } from "@react-navigation/native";
 import { UserContext } from "../../context/UserContext";
+import { useSelector } from "react-redux";
 
 const TopSearchComp = ({
   noBack,
@@ -20,6 +21,8 @@ const TopSearchComp = ({
 }) => {
   const { auth } = useContext(UserContext);
   const navigation = useNavigation();
+  const cartItem = useSelector((state) => state.cart.cartItem);
+
   return (
     <View style={styles.topInputWrapper}>
       {noBack ? null : (
@@ -46,7 +49,7 @@ const TopSearchComp = ({
         <View>
           {cart && auth ? (
             <View style={styles.cartCountContainer}>
-              <Text style={styles.cartText}>{auth?.cartItems.length}</Text>
+              <Text style={styles.cartText}>{cartItem.length}</Text>
             </View>
           ) : null}
           <Ionicons name={name} size={27} color={color} onPress={onPress} />

@@ -7,23 +7,60 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { Color } from "../../COLORS/Colors";
-import { TopComp } from "../../components/Reuse/Reuseable";
+import { ButtonComp, TopComp } from "../../components/Reuse/Reuseable";
 import AntDesign from "react-native-vector-icons/AntDesign";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addToCart,
+  decreaseCartQuantity,
+  getTotal,
+  removeFromCart,
+} from "../../redux/cartSlice";
 
-const img =
-  "https://kddi-h.assetsadobe3.com/is/image/content/dam/au-com/mobile/mb_img_58.jpg?scl=1";
 const Cart = () => {
-  const arr = [1, 2, 3];
+  const dispatch = useDispatch();
+
+  const cart = useSelector((state) => state.cart);
+
+  useEffect(() => {
+    dispatch(getTotal());
+  }, [cart, dispatch]);
   return (
     <View style={styles.container}>
       <TopComp text="Cart" extraStyle={styles.topComExtraStyle} name={"cart"} />
       <StatusBar barStyle={"light-content"} backgroundColor={Color.RED} />
-      <ScrollView style={styles.mainContainer}>
-        {arr.map((data) => (
-          <SingleCartProduct key={data} />
-        ))}
+      <ScrollView
+        style={styles.mainContainer}
+        showsVerticalScrollIndicator={false}
+      >
+        {cart?.cartItem?.length > 0 ? (
+          cart?.cartItem?.map((data) => (
+            <SingleCartProduct data={data} key={data._id} />
+          ))
+        ) : (
+          <View>
+            <Text style={styles.emptyText}>No Cart Item Till now!</Text>
+          </View>
+        )}
+        {cart?.cartItem?.length > 0 && (
+          <>
+            <View style={styles.bottomContainer}>
+              <Text>Total Amount : </Text>
+              <Text style={styles.totalAmount}>{cart.cartTotalAmount} Tk</Text>
+            </View>
+
+            <View
+              style={{
+                paddingHorizontal: 15,
+                marginVertical: 15,
+              }}
+            >
+              <ButtonComp text="ORDER!" />
+            </View>
+          </>
+        )}
       </ScrollView>
     </View>
   );
@@ -31,29 +68,53 @@ const Cart = () => {
 
 export default Cart;
 
-const SingleCartProduct = () => (
-  <View style={styles.productStyle}>
-    <Image source={{ uri: img }} style={styles.imgStyle} />
-    <View style={styles.middleContentStyle}>
-      <Text>Iphone 14</Text>
-      <Text style={styles.shonnameStyle}>shopname</Text>
-      <View style={styles.flexStyle}>
-        <CartAddRemoveBtn name={"plus"} />
-        <Text style={styles.counter}>0</Text>
-        <CartAddRemoveBtn name={"minus"} />
+const SingleCartProduct = ({ data }) => {
+  const dispatch = useDispatch();
+  // console.log(data);
+
+  // incriment cart quantity
+  const addProduct = () => {
+    dispatch(addToCart(data));
+  };
+
+  // decrement cartQuantity
+  const decrementCartQuantity = () => {
+    dispatch(decreaseCartQuantity(data));
+  };
+  // remove product from cart
+  const removeProductfromCart = () => {
+    dispatch(removeFromCart(data._id));
+  };
+  return (
+    <View style={styles.productStyle}>
+      <Image source={{ uri: data?.featuredImg[0] }} style={styles.imgStyle} />
+      <View style={styles.middleContentStyle}>
+        <Text>{data?.name}</Text>
+        <Text style={styles.shonnameStyle}>{data.postedBy.shopname}</Text>
+        <View style={styles.flexStyle}>
+          <CartAddRemoveBtn name={"plus"} onPress={addProduct} />
+          <Text style={styles.counter}>0</Text>
+          <CartAddRemoveBtn name={"minus"} onPress={decrementCartQuantity} />
+        </View>
+      </View>
+
+      <View style={styles.rightConatinerStyle}>
+        <CartAddRemoveBtn
+          name={"delete"}
+          color={Color.RED}
+          onPress={removeProductfromCart}
+        />
+        <Text style={styles.shonnameStyle}>
+          {data.price} * {data.cartQuantity}
+        </Text>
+        <Text>{data.price * data.cartQuantity} Tk</Text>
       </View>
     </View>
+  );
+};
 
-    <View style={styles.rightConatinerStyle}>
-      <CartAddRemoveBtn name={"delete"} color={Color.RED} />
-      <Text style={styles.shonnameStyle}>1220 * 2</Text>
-      <Text>Price</Text>
-    </View>
-  </View>
-);
-
-const CartAddRemoveBtn = ({ name, color }) => (
-  <TouchableOpacity>
+const CartAddRemoveBtn = ({ name, color, onPress }) => (
+  <TouchableOpacity onPress={onPress}>
     <AntDesign name={name} size={20} color={color} />
   </TouchableOpacity>
 );
@@ -106,5 +167,22 @@ const styles = StyleSheet.create({
   },
   shonnameStyle: {
     marginVertical: 7,
+  },
+  emptyText: {
+    textAlign: "center",
+    marginTop: 20,
+    fontSize: 16,
+  },
+  bottomContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    paddingHorizontal: 15,
+    marginVertical: 7,
+  },
+  totalAmount: {
+    fontWeight: "700",
+    marginLeft: 5,
+    fontSize: 16,
   },
 });
