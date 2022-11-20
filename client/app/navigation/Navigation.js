@@ -11,6 +11,7 @@ import Categories from "../screens/categorieScreen/Categories";
 import AskQuestion from "../screens/product/AskQuestion";
 import Register from "../screens/auth/Register";
 import Login from "../screens/auth/Login";
+import Buy_A_Product from "../screens/BuyScreens/Buy_A_Product";
 
 const Stack = createNativeStackNavigator();
 
@@ -22,6 +23,7 @@ const Navigation = () => {
       <Stack.Screen name="Categories" component={Categories} />
       <Stack.Screen name="ProductDetails" component={ProductDetails} />
       <Stack.Screen name="AskQuestion" component={AskQuestion} />
+      <Stack.Screen name="BuyAProduct" component={Buy_A_Product} />
       <Stack.Screen name="Register" component={Register} />
       <Stack.Screen name="Login" component={Login} />
     </Stack.Navigator>

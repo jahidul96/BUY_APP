@@ -108,6 +108,7 @@ const ProductDetails = ({ route, navigation }) => {
     if (!updatedUser) {
       return navigation.navigate("Profile");
     }
+    navigation.navigate("BuyAProduct", { value });
   };
 
   // adto favorites button
@@ -131,14 +132,13 @@ const ProductDetails = ({ route, navigation }) => {
   const addFavToDb = async (val, id) => {
     try {
       const res = await axios.put(`${ApiPoint}/auth/favorites/${id}`, val);
-      // setUpdatedUser(res.data.user);
       setFavorites(res.data.user.favorites);
     } catch (error) {
       console.log(error);
     }
   };
 
-  // api and some data call
+  // api and some data call/rerender page
   useEffect(() => {
     setTimeout(() => {
       getSingleProduct(`${ApiPoint}/product/${value._id}`).then((data) => {
