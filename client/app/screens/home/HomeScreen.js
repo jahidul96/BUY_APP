@@ -48,7 +48,7 @@ const HomeScreen = ({ navigation }) => {
               })
               .catch((err) => console.log(err));
           })
-          .catch((err) => err);
+          .catch((err) => console.log(err.message));
 
         setWait(false);
       }, 1500);
@@ -57,11 +57,7 @@ const HomeScreen = ({ navigation }) => {
     return unsubscribe;
   }, [navigation]);
   return (
-    <View
-      style={{
-        flex: 1,
-      }}
-    >
+    <View style={styles.container}>
       <StatusBar barStyle={"light-content"} backgroundColor={Color.RED} />
       {wait ? (
         <Loadder />
@@ -75,7 +71,7 @@ const HomeScreen = ({ navigation }) => {
             onPress={() => navigation.navigate("Profile")}
           />
 
-          <ScrollView style={styles.root}>
+          <ScrollView style={styles.contentWrapper}>
             <SliderCarousel />
             <ProductCategorie onPress={goToCategories} />
             <View style={styles.productWrapper}>
@@ -101,10 +97,14 @@ const HomeScreen = ({ navigation }) => {
 export default HomeScreen;
 
 const styles = StyleSheet.create({
-  root: {
+  container: {
+    flex: 1,
+  },
+  contentWrapper: {
     flex: 1,
     backgroundColor: Color.GRAY,
   },
+
   topInputWrapper: {
     position: "absolute",
     top: 0,

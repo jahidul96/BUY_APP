@@ -50,6 +50,7 @@ export const Input = ({ placeholder, extraInputStyle, value, setValue }) => {
       placeholder={placeholder}
       style={[styles.inputStyle, extraInputStyle]}
       onChangeText={(text) => setValue(text)}
+      value={value}
     />
   );
 };

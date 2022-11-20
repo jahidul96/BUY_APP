@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   shopnameStyle: {
-    marginVertical: 7,
+    marginVertical: 5,
   },
   emptyText: {
     textAlign: "center",

@@ -1,30 +1,57 @@
-import { Image, StatusBar, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { Alert, Image, StatusBar, StyleSheet, Text, View } from "react-native";
+import React, { useState } from "react";
 import { Color } from "../../COLORS/Colors";
-import { ButtonComp } from "../../components/Reuse/Reuseable";
+import { ButtonComp, TopComp } from "../../components/Reuse/Reuseable";
+import OrderInfo from "../../components/Reuse/OrderInfo";
 
-const Buy_A_Product = ({ route }) => {
+const Buy_A_Product = ({ route, navigation }) => {
   const { value } = route.params;
+  const [order, setOrder] = useState(false);
 
   // console.log(value);
-  return (
-    <View>
-      <StatusBar barStyle={"light-content"} backgroundColor={Color.RED} />
-      <View></View>
-      <BuyProduct data={value} />
-      <View style={styles.bottomContainer}>
-        <Text>Total Amount : </Text>
-        <Text style={styles.totalAmount}>{value.price} Tk</Text>
-      </View>
 
-      <View
-        style={{
-          paddingHorizontal: 15,
-          marginVertical: 15,
-        }}
-      >
-        <ButtonComp text="PLACE AN ORDER!" />
-      </View>
+  const placeAnOrder = () => {
+    setOrder(true);
+    // console.log(value.postedBy);
+  };
+
+  const OrderNow = (val) => {
+    // if (val.password == "") {
+    //   return Alert.alert("password missing!");
+    // }
+    console.log(val);
+  };
+  return (
+    <View style={styles.root}>
+      <StatusBar barStyle={"light-content"} backgroundColor={Color.RED} />
+
+      <TopComp
+        text={"OrderNow"}
+        extraStyle={styles.extraStyle}
+        onPress={() => navigation.goBack()}
+      />
+      {order ? (
+        <View style={styles.container}>
+          <OrderInfo onPress={OrderNow} />
+        </View>
+      ) : (
+        <>
+          <BuyProduct data={value} />
+          <View style={styles.bottomContainer}>
+            <Text>Total Amount : </Text>
+            <Text style={styles.totalAmount}>{value.price} Tk</Text>
+          </View>
+
+          <View
+            style={{
+              paddingHorizontal: 15,
+              marginVertical: 15,
+            }}
+          >
+            <ButtonComp text="PLACE AN ORDER!" onPress={placeAnOrder} />
+          </View>
+        </>
+      )}
     </View>
   );
 };
@@ -43,6 +70,14 @@ const BuyProduct = ({ data }) => (
 export default Buy_A_Product;
 
 const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+  },
+  container: {
+    flex: 1,
+    paddingHorizontal: 15,
+    justifyContent: "center",
+  },
   productStyle: {
     flexDirection: "row",
     alignItems: "center",
@@ -51,6 +86,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     borderBottomWidth: 1,
     borderColor: Color.GRAY,
+    borderTopWidth: 1,
     paddingVertical: 10,
   },
 
@@ -81,5 +117,8 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     marginLeft: 5,
     fontSize: 16,
+  },
+  extraStyle: {
+    paddingHorizontal: 15,
   },
 });
