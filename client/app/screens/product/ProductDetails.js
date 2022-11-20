@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Color } from "../../COLORS/Colors";
 import TopSearchComp from "../../components/Reuse/TopSearchComp";
 import { WIDTH } from "../../utils/Dimension";
@@ -44,6 +44,7 @@ const ProductDetails = ({ route, navigation }) => {
     updatedUser == null ? [] : updatedUser?.favorites
   );
   const [imgIndex, setImgIndex] = useState(0);
+  const scrollRef = useRef(null);
   const dispatch = useDispatch();
 
   // check already liked or not
@@ -70,7 +71,6 @@ const ProductDetails = ({ route, navigation }) => {
     if (!updatedUser) {
       return navigation.navigate("Profile");
     }
-
     if (isAlreadyLiked.length == 0) {
       let val = [
         ...likes,
@@ -78,15 +78,6 @@ const ProductDetails = ({ route, navigation }) => {
           likedBy: updatedUser?.email,
         },
       ];
-
-      // let notifyVal = [
-      //   ...bloggerProfile?.notifications,
-      //   {
-      //     userEmail: user.email,
-      //     username: user.username,
-      //     type: "like",
-      //   },
-      // ];
       likePost(val);
       setLikes(val);
     } else {
@@ -156,6 +147,10 @@ const ProductDetails = ({ route, navigation }) => {
       setWait(false);
     }, 1500);
     setImgIndex(0);
+    scrollRef?.current?.scrollTo({
+      y: 0,
+      animated: true,
+    });
   }, [value]);
 
   // select image and update func
@@ -179,7 +174,7 @@ const ProductDetails = ({ route, navigation }) => {
         <Wait />
       ) : (
         <>
-          <ScrollView style={styles.contentWrapper}>
+          <ScrollView style={styles.contentWrapper} ref={scrollRef}>
             {/* product featured image */}
             <Image
               source={{ uri: value?.featuredImg[imgIndex] }}
