@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useContext } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Color } from "../../COLORS/Colors";
@@ -54,7 +54,9 @@ const TopSearchComp = ({
               <Text style={styles.cartText}>{cartItem.length}</Text>
             </View>
           ) : null}
-          <Ionicons name={name} size={27} color={color} onPress={onPress} />
+          <TouchableOpacity onPress={onPress}>
+            <Ionicons name={name} size={27} color={color} />
+          </TouchableOpacity>
         </View>
       )}
     </View>

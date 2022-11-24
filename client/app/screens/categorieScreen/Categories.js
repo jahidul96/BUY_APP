@@ -9,11 +9,10 @@ import Wait from "../../components/Wait";
 
 const Categories = ({ route, navigation }) => {
   const { value } = route.params;
-  const [productCategorie, setProductCategorie] = useState(value?.categorie);
   const [wait, setWait] = useState(true);
 
   const { loading, err, data } = UseFetch(
-    `${ApiPoint}/product/similarproduct?categorie=${productCategorie}`
+    `${ApiPoint}/product/similarproduct?categorie=${value?.categorie}`
   );
 
   useEffect(() => {
@@ -31,6 +30,7 @@ const Categories = ({ route, navigation }) => {
         cart
         color={Color.RED}
         onPressInput={() => navigation.navigate("Search")}
+        onPress={() => navigation.navigate("Cart")}
       />
       {wait ? (
         <Wait />

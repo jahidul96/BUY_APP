@@ -1,4 +1,12 @@
-import { Alert, Image, StatusBar, StyleSheet, Text, View } from "react-native";
+import {
+  Alert,
+  Image,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React, { useState } from "react";
 import { Color } from "../../COLORS/Colors";
 import { ButtonComp, TopComp } from "../../components/Reuse/Reuseable";
@@ -24,18 +32,26 @@ const Buy_A_Product = ({ route, navigation }) => {
   return (
     <View style={styles.root}>
       <StatusBar barStyle={"light-content"} backgroundColor={Color.RED} />
-
-      <TopComp
-        text={"OrderNow"}
-        extraStyle={styles.extraStyle}
-        onPress={() => navigation.goBack()}
-      />
       {order ? (
+        // order info comp
         <View style={styles.container}>
+          <TouchableOpacity
+            onPress={() => setOrder(!order)}
+            style={styles.closeContainer}
+          >
+            <Text style={styles.crossText}>X</Text>
+          </TouchableOpacity>
           <OrderInfo onPress={OrderNow} />
         </View>
       ) : (
         <>
+          {/* top component */}
+          <TopComp
+            text={"OrderNow"}
+            extraStyle={styles.extraStyle}
+            onPress={() => navigation.goBack()}
+          />
+          {/* product details */}
           <BuyProduct data={value} />
           <View style={styles.bottomContainer}>
             <Text>Total Amount : </Text>
@@ -120,5 +136,14 @@ const styles = StyleSheet.create({
   },
   extraStyle: {
     paddingHorizontal: 15,
+  },
+  closeContainer: {
+    position: "absolute",
+    right: 15,
+    top: 10,
+  },
+  crossText: {
+    color: Color.RED,
+    fontSize: 20,
   },
 });

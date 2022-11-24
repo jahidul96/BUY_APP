@@ -3,10 +3,14 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getTotal } from "../redux/cartSlice";
 import { ButtonComp } from "./Reuse/Reuseable";
+import { useNavigation } from "@react-navigation/native";
 
-const TotalComp = () => {
+// total money plus minus component
+
+const TotalComp = ({ onPress }) => {
   const cart = useSelector((state) => state.cart);
   const dispatch = useDispatch();
+  const navigation = useNavigation();
 
   useEffect(() => {
     dispatch(getTotal());
@@ -26,7 +30,7 @@ const TotalComp = () => {
               marginVertical: 15,
             }}
           >
-            <ButtonComp text="ORDER!" />
+            <ButtonComp text="ORDER!" onPress={onPress} />
           </View>
         </>
       )}
