@@ -7,7 +7,7 @@ import { ApiPoint } from "../../api/endPoint";
 import MatchProducts from "../../components/Reuse/MatchProducts";
 import Wait from "../../components/Wait";
 
-const Categories = ({ route }) => {
+const Categories = ({ route, navigation }) => {
   const { value } = route.params;
   const [productCategorie, setProductCategorie] = useState(value?.categorie);
   const [wait, setWait] = useState(true);
@@ -30,6 +30,7 @@ const Categories = ({ route }) => {
         extraInputStyle={styles.extraInputStyle}
         cart
         color={Color.RED}
+        onPressInput={() => navigation.navigate("Search")}
       />
       {wait ? (
         <Wait />

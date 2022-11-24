@@ -18,6 +18,7 @@ const TopSearchComp = ({
   btnOnpress,
   search,
   setValue,
+  onPressInput,
 }) => {
   const { auth } = useContext(UserContext);
   const navigation = useNavigation();
@@ -38,6 +39,7 @@ const TopSearchComp = ({
         placeholder="Search.."
         extraInputStyle={extraInputStyle}
         setValue={setValue}
+        onPressInput={onPressInput}
       />
       {search ? (
         <ButtonComp

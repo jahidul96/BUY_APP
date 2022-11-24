@@ -69,6 +69,7 @@ const HomeScreen = ({ navigation }) => {
             name="person-circle"
             color={Color.WHITE}
             onPress={() => navigation.navigate("Profile")}
+            onPressInput={() => navigation.navigate("Search")}
           />
 
           <ScrollView style={styles.contentWrapper}>
