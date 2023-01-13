@@ -22,7 +22,7 @@ import { removeValueFromAsync } from "../../utils/LocalStorage";
 import Loadder from "../../components/Loadder";
 import { MainUserContext } from "../../context/MainUserContext";
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ navigation }) => {
   const { auth, setAuthUser } = useContext(UserContext);
   const { updatedUser, setUpdatedUser } = useContext(MainUserContext);
 
@@ -76,7 +76,12 @@ const ProfileScreen = () => {
               name="shopping-bag"
               text="Shopping"
             />
-            <ActivityComp Icon={HeartIcon} name="heart" text="Favourites" />
+            <ActivityComp
+              Icon={HeartIcon}
+              name="heart"
+              text="Favourites"
+              onPress={() => navigation.navigate("Favorite")}
+            />
 
             <ActivityComp
               Icon={Credit}
@@ -99,8 +104,8 @@ const ProfileScreen = () => {
 
 export default ProfileScreen;
 
-const ActivityComp = ({ name, text, Icon }) => (
-  <TouchableOpacity style={styles.activityCompStyle}>
+const ActivityComp = ({ name, text, Icon, onPress }) => (
+  <TouchableOpacity style={styles.activityCompStyle} onPress={onPress}>
     <Icon name={name} size={18} />
     <Text style={styles.activityText}>{text}</Text>
   </TouchableOpacity>
