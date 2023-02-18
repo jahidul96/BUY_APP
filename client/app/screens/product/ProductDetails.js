@@ -11,7 +11,7 @@ import {
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { Color } from "../../COLORS/Colors";
 import TopSearchComp from "../../components/Reuse/TopSearchComp";
-import { WIDTH } from "../../utils/Dimension";
+import { HEIGHT, WIDTH } from "../../utils/Dimension";
 import {
   ButtonComp,
   Lodder,
@@ -32,25 +32,23 @@ import axios from "axios";
 import { getSingleProduct } from "../../api/getSingleProduct";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MainUserContext } from "../../context/MainUserContext";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../redux/cartSlice";
 
 const ProductDetails = ({ route, navigation }) => {
   const { value } = route.params;
   const [wait, setWait] = useState(true);
-  const { updatedUser, setUpdatedUser } = useContext(MainUserContext);
+  const user = useSelector((state) => state.user.user);
   const [likes, setLikes] = useState([]);
   const [favorites, setFavorites] = useState(
-    updatedUser == null ? [] : updatedUser?.favorites
+    user == null ? [] : user?.favorites
   );
   const [imgIndex, setImgIndex] = useState(0);
   const scrollRef = useRef(null);
   const dispatch = useDispatch();
 
   // check already liked or not
-  const isAlreadyLiked = likes.filter(
-    (val) => val.likedBy == updatedUser?.email
-  );
+  const isAlreadyLiked = likes.filter((val) => val.likedBy == user?.email);
 
   // check already favorite or not
   const isAlreadyFavorites = favorites?.filter((fav) => fav == value._id);
@@ -68,20 +66,20 @@ const ProductDetails = ({ route, navigation }) => {
   // like post button
 
   const LikePost = () => {
-    if (!updatedUser) {
+    if (!user) {
       return navigation.navigate("Profile");
     }
     if (isAlreadyLiked.length == 0) {
       let val = [
         ...likes,
         {
-          likedBy: updatedUser?.email,
+          likedBy: user?.email,
         },
       ];
       likePost(val);
       setLikes(val);
     } else {
-      let val = likes.filter((like) => like.likedBy != updatedUser?.email);
+      let val = likes.filter((like) => like.likedBy != user?.email);
       likePost(val);
       setLikes(val);
     }
@@ -97,7 +95,7 @@ const ProductDetails = ({ route, navigation }) => {
 
   // add to cart button
   const addProduct = async () => {
-    if (!updatedUser) {
+    if (!user) {
       return navigation.navigate("Profile");
     }
     dispatch(addToCart(value));
@@ -105,7 +103,7 @@ const ProductDetails = ({ route, navigation }) => {
 
   // buynow button
   const buyNow = async () => {
-    if (!updatedUser) {
+    if (!user) {
       return navigation.navigate("Profile");
     }
     navigation.navigate("BuyAProduct", { value });
@@ -113,19 +111,19 @@ const ProductDetails = ({ route, navigation }) => {
 
   // adto favorites button
   const addtoFav = async () => {
-    if (!updatedUser) {
+    if (!user) {
       return navigation.navigate("Profile");
     }
     if (isAlreadyFavorites.length == 0) {
       const val = [...favorites, value?._id];
 
       setFavorites(val);
-      addFavToDb(val, updatedUser?._id);
+      addFavToDb(val, user?._id);
     } else {
       const val = favorites.filter((fav) => fav != value?._id);
 
       setFavorites(val);
-      addFavToDb(val, updatedUser._id);
+      addFavToDb(val, user._id);
     }
   };
 
@@ -180,6 +178,15 @@ const ProductDetails = ({ route, navigation }) => {
               source={{ uri: value?.featuredImg[imgIndex] }}
               style={styles.imgStyle}
             />
+
+            {/* image slider */}
+            <View style={styles.imgSliderWrapper}>
+              <ProductImageSlider
+                data={value?.featuredImg}
+                onPress={selectImg}
+                imgIndex={imgIndex}
+              />
+            </View>
 
             {/* top product name, desc, price  */}
             <View style={styles.productDescWrapper}>
@@ -254,17 +261,13 @@ const ProductDetails = ({ route, navigation }) => {
               </View>
             </View>
 
-            {/* image slider */}
-            <View style={styles.imgSliderWrapper}>
-              <ProductImageSlider
-                data={value?.featuredImg}
-                onPress={selectImg}
-                imgIndex={imgIndex}
-              />
-            </View>
-
             {/* reviews */}
-            <View style={styles.imgSliderWrapper}>
+            <View
+              style={{
+                marginBottom: 10,
+                paddingHorizontal: 10,
+              }}
+            >
               <Text>Reviews...</Text>
             </View>
 
@@ -330,6 +333,7 @@ const BottomComp = ({ addProduct, buyNow, isAlreadyFavorites, addtoFav }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: Color.LightGray,
   },
   contentWrapper: {
     flex: 1,
@@ -339,7 +343,7 @@ const styles = StyleSheet.create({
   },
   imgStyle: {
     width: WIDTH,
-    height: WIDTH / 1.1,
+    height: HEIGHT / 3,
   },
   productDescWrapper: {
     padding: 10,
@@ -431,7 +435,7 @@ const styles = StyleSheet.create({
 
   imgSliderWrapper: {
     paddingHorizontal: 10,
-    paddingBottom: 10,
+    marginTop: 15,
   },
 
   titleText: {

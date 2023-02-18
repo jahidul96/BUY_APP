@@ -19,6 +19,8 @@ import { ApiPoint } from "../../api/endPoint";
 import Loadder from "../../components/Loadder";
 import { ButtonComp, Input, TopComp } from "../../components/Reuse/Reuseable";
 import { uploadFileToStorage } from "../../firebase/FBUpload";
+import { addUser } from "../../redux/userSlice";
+import { useDispatch } from "react-redux";
 
 const Register = ({ navigation }) => {
   const [username, setUsername] = useState("");
@@ -27,6 +29,7 @@ const Register = ({ navigation }) => {
   const [phone, setPhone] = useState("");
   const [image, setImage] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const dispatch = useDispatch();
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -70,6 +73,7 @@ const Register = ({ navigation }) => {
 
         // console.log(response.data);
         const value = response.data.user;
+        dispatch(addUser(value));
         const jsonValue = JSON.stringify(value);
         await AsyncStorage.setItem("user", jsonValue);
         setUploading(false);

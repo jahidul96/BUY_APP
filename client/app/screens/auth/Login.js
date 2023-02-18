@@ -10,13 +10,14 @@ import { UserContext } from "../../context/UserContext";
 import Loadder from "../../components/Loadder";
 import { ApiPoint } from "../../api/endPoint";
 import { ButtonComp, Input, TopComp } from "../../components/Reuse/Reuseable";
+import { addUser } from "../../redux/userSlice";
+import { useDispatch } from "react-redux";
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [uploading, setUploading] = useState(false);
-  const { auth, setAuthUser } = useContext(UserContext);
-
+  const dispatch = useDispatch();
   // console.log("user", user);
 
   const goBackFunc = () => {
@@ -37,7 +38,8 @@ const Login = ({ navigation }) => {
       // console.log(response.data);
 
       const value = response.data.user;
-      setAuthUser(value);
+      // setAuthUser(value);
+      dispatch(addUser(value));
       const jsonValue = JSON.stringify(value);
       await AsyncStorage.setItem("user", jsonValue);
       setUploading(false);

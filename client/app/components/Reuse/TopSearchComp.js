@@ -5,7 +5,6 @@ import { Color } from "../../COLORS/Colors";
 import { WIDTH } from "../../utils/Dimension";
 import { ButtonComp, Input } from "./Reuseable";
 import { useNavigation } from "@react-navigation/native";
-import { UserContext } from "../../context/UserContext";
 import { useSelector } from "react-redux";
 
 const TopSearchComp = ({
@@ -20,7 +19,7 @@ const TopSearchComp = ({
   setValue,
   onPressInput,
 }) => {
-  const { auth } = useContext(UserContext);
+  const user = useSelector((state) => state.user.user);
   const navigation = useNavigation();
   const cartItem = useSelector((state) => state.cart.cartItem);
 
@@ -49,7 +48,7 @@ const TopSearchComp = ({
         />
       ) : (
         <View>
-          {cart && auth ? (
+          {cart && user ? (
             <View style={styles.cartCountContainer}>
               <Text style={styles.cartText}>{cartItem.length}</Text>
             </View>

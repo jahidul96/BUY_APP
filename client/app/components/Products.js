@@ -3,6 +3,8 @@ import React from "react";
 import { HEIGHT, WIDTH } from "../utils/Dimension";
 import { Color } from "../COLORS/Colors";
 import { useNavigation } from "@react-navigation/native";
+import { takaIcon } from "../utils/DummyImgFile";
+import { Ionicons } from "../utils/IconExport";
 
 const Products = ({ ProductsData }) => {
   const navigation = useNavigation();
@@ -32,16 +34,16 @@ const Product = ({ data, onPress }) => {
         <View
           style={[styles.flexContainer, { justifyContent: "space-between" }]}
         >
-          <Text style={styles.titleStyle}>{data.name}</Text>
+          <Text style={styles.titleStyle}>{data?.name}</Text>
           <View style={styles.flexContainer}>
-            <Text style={styles.titleStyle}>{data.rating.length}</Text>
-            <Text style={styles.titleStyle}>({data.rating.length})</Text>
+            <Ionicons name="star" color={"orange"} />
+            <Text style={styles.rating}>({data?.rating?.length})</Text>
           </View>
         </View>
-        <Text style={styles.priceText}>$ {data.price}</Text>
-        <Text style={[styles.priceText, styles.shopname]}>
-          {data.postedBy.shopname}
-        </Text>
+        <View style={styles.priceWrapper}>
+          <Image source={{ uri: takaIcon }} style={styles.tkIconStyle} />
+          <Text style={styles.priceText}> {data?.price}</Text>
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -55,15 +57,15 @@ const styles = StyleSheet.create({
   },
   productContainer: {
     width: WIDTH / 2.2,
-    paddingBottom: 5,
+    paddingBottom: 10,
     backgroundColor: Color.WHITE,
     elevation: 1,
     borderRadius: 5,
-    marginBottom: 5,
+    marginBottom: 10,
   },
   imgStyle: {
     width: "100%",
-    height: 120,
+    height: 100,
     borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
   },
@@ -72,15 +74,31 @@ const styles = StyleSheet.create({
   },
   flexContainer: {
     flexDirection: "row",
+    alignItems: "center",
+  },
+  rating: {
+    fontSize: 11,
+    fontWeight: "600",
+    marginLeft: 2,
+  },
+  priceWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 2,
+  },
+  tkIconStyle: {
+    width: 16,
+    height: 25,
+    marginLeft: -3,
   },
   titleStyle: {
-    fontSize: 12,
-    fontWeight: "600",
+    fontSize: 13,
+    fontWeight: "bold",
     letterSpacing: 1,
   },
   priceText: {
     marginTop: 4,
-    fontSize: 11,
+    fontSize: 13,
     fontWeight: "600",
     color: Color.RED,
   },

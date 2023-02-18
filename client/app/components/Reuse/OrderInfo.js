@@ -1,13 +1,13 @@
 import { StyleSheet, Text, View } from "react-native";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { ButtonComp, Input } from "./Reuseable";
-import { MainUserContext } from "../../context/MainUserContext";
+import { useSelector } from "react-redux";
 
 const OrderInfo = ({ onPress }) => {
-  const { updatedUser } = useContext(MainUserContext);
-  const [username, setUsername] = useState(updatedUser?.username);
-  const [email, setEmail] = useState(updatedUser?.email);
-  const [phone, setPhone] = useState(updatedUser?.phone);
+  const user = useSelector((state) => state.user.user);
+  const [username, setUsername] = useState(user?.username);
+  const [email, setEmail] = useState(user?.email);
+  const [phone, setPhone] = useState(user?.phone);
   const [password, setPassword] = useState("");
   const [addres, setAddres] = useState("");
   const [cardNumber, setCardNumber] = useState("");

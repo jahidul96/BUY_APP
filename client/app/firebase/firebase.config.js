@@ -1,14 +1,22 @@
 import { initializeApp } from "firebase/app";
+import {
+  Apikey,
+  appId,
+  authDomain,
+  messagingSenderId,
+  storageBucket,
+  projectId,
+} from "@env";
 
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAKJQjrXitEk4itJIbqTvpf3nKmATS5FHw",
-  authDomain: "blog-rn12.firebaseapp.com",
-  projectId: "blog-rn12",
-  storageBucket: "blog-rn12.appspot.com",
-  messagingSenderId: "994400930478",
-  appId: "1:994400930478:web:b2e3f72090ff758351fb3f",
+  apiKey: Apikey,
+  authDomain: authDomain,
+  projectId: projectId,
+  storageBucket: storageBucket,
+  messagingSenderId: messagingSenderId,
+  appId: appId,
 };
 
 const app = initializeApp(firebaseConfig);

@@ -23,12 +23,13 @@ import { UserContext } from "../../context/UserContext";
 import { MainUserContext } from "../../context/MainUserContext";
 import Loadder from "../../components/Loadder";
 import { getSingleUser } from "../../api/userDataApi";
+import { addUser } from "../../redux/userSlice";
+import { useDispatch } from "react-redux";
 
 const HomeScreen = ({ navigation }) => {
-  const { setAuthUser } = useContext(UserContext);
-  const { updatedUser, setUpdatedUser } = useContext(MainUserContext);
   const { loading, err, data } = UseFetch(`${ApiPoint}/product`);
   const [wait, setWait] = useState(true);
+  const dispatch = useDispatch();
 
   const goToCategories = (value) => {
     navigation.navigate("Categories", { value });
@@ -41,10 +42,9 @@ const HomeScreen = ({ navigation }) => {
       setTimeout(() => {
         getUserFromAsync()
           .then((data) => {
-            setAuthUser(data);
-            getSingleUser(`${ApiPoint}/auth/user/${data._id}`)
+            getSingleUser(`${ApiPoint}/auth/user/${data?._id}`)
               .then((data) => {
-                setUpdatedUser(data.data.user);
+                dispatch(addUser(data.data.user));
               })
               .catch((err) => console.log(err));
           })
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
   },
   contentWrapper: {
     flex: 1,
-    backgroundColor: Color.GRAY,
+    backgroundColor: Color.LightGray,
   },
 
   topInputWrapper: {
@@ -128,9 +128,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   titleText: {
-    fontSize: 16,
+    fontSize: 17,
     letterSpacing: 1,
     marginBottom: 8,
+    fontWeight: "bold",
   },
   loadingContainer: {
     marginTop: 30,

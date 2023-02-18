@@ -1,15 +1,17 @@
 import { ScrollView, StatusBar, StyleSheet, Text, View } from "react-native";
-import React, { useContext } from "react";
+import React from "react";
 import LoggedComp from "../../components/LoggedComp";
-import { UserContext } from "../../context/UserContext";
 import { Color } from "../../COLORS/Colors";
+import { useSelector } from "react-redux";
 
 const Favorite = () => {
-  const { auth } = useContext(UserContext);
+  const user = useSelector((state) => state.user.user);
+
+  // console.log(user);
   return (
     <View style={styles.container}>
       <StatusBar barStyle={"light-content"} backgroundColor={Color.RED} />
-      {auth ? (
+      {user ? (
         <ScrollView>
           <Text>Favorite's</Text>
         </ScrollView>

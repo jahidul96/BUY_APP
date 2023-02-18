@@ -10,21 +10,19 @@ import {
 } from "react-native";
 import React, { useContext, useState } from "react";
 import LoggedComp from "../../components/LoggedComp";
-import { UserContext } from "../../context/UserContext";
 import { Color } from "../../COLORS/Colors";
-import CameraIcon from "react-native-vector-icons/Feather";
 import LocationIcon from "react-native-vector-icons/Entypo";
 import ShoppingBag from "react-native-vector-icons/Feather";
 import HeartIcon from "react-native-vector-icons/Feather";
-import Percent from "react-native-vector-icons/Feather";
 import Credit from "react-native-vector-icons/Entypo";
 import { removeValueFromAsync } from "../../utils/LocalStorage";
 import Loadder from "../../components/Loadder";
-import { MainUserContext } from "../../context/MainUserContext";
+import { removeUser } from "../../redux/userSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const ProfileScreen = ({ navigation }) => {
-  const { auth, setAuthUser } = useContext(UserContext);
-  const { updatedUser, setUpdatedUser } = useContext(MainUserContext);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.user);
 
   const [loading, setLoading] = useState(false);
 
@@ -32,8 +30,7 @@ const ProfileScreen = ({ navigation }) => {
     setLoading(true);
     setTimeout(() => {
       removeValueFromAsync();
-      setAuthUser(null);
-      setUpdatedUser(null);
+      dispatch(removeUser());
       setLoading(false);
       Alert.alert("Logout succefull!");
     }, 1500);
@@ -44,20 +41,20 @@ const ProfileScreen = ({ navigation }) => {
     <View style={styles.container}>
       <StatusBar barStyle={"light-content"} backgroundColor={Color.RED} />
       {loading && <Loadder />}
-      {updatedUser ? (
+      {user ? (
         <ScrollView contentContainerStyle={styles.mainWrapper}>
           <View style={styles.profilemainWrapper}>
             <View>
-              <Text style={styles.nameText}>{updatedUser?.username}</Text>
-              <Text style={styles.email}>{updatedUser?.email}</Text>
-              <Text style={styles.phnText}>{updatedUser?.phone}</Text>
+              <Text style={styles.nameText}>{user?.username}</Text>
+              <Text style={styles.email}>{user?.email}</Text>
+              <Text style={styles.phnText}>{user?.phone}</Text>
               <TouchableOpacity>
                 <Text style={styles.editText}>Edit Profile</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.profieImgWrapper}>
               <Image
-                source={{ uri: updatedUser.profileImg }}
+                source={{ uri: user.profileImg }}
                 style={{ width: "100%", height: "100%", borderRadius: 100 }}
               />
             </View>
