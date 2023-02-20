@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     paddingTop: 10,
     paddingHorizontal: 10,
+    marginVertical: 10,
   },
   wrapper: {
     width: 57,

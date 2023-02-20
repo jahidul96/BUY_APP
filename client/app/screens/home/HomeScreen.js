@@ -7,10 +7,9 @@ import {
   StatusBar,
   ScrollView,
 } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Color } from "../../COLORS/Colors";
 import { Input, Lodder } from "../../components/Reuse/Reuseable";
-import Ionicons from "react-native-vector-icons/Ionicons";
 import { HEIGHT, WIDTH } from "../../utils/Dimension";
 import { SliderCarousel } from "../../components/SliderCarousel";
 import ProductCategorie from "../../components/ProductCategorie";
@@ -19,8 +18,7 @@ import UseFetch from "../../api/useFetch";
 import { ApiPoint } from "../../api/endPoint";
 import TopSearchComp from "../../components/Reuse/TopSearchComp";
 import { getUserFromAsync } from "../../utils/LocalStorage";
-import { UserContext } from "../../context/UserContext";
-import { MainUserContext } from "../../context/MainUserContext";
+
 import Loadder from "../../components/Loadder";
 import { getSingleUser } from "../../api/userDataApi";
 import { addUser } from "../../redux/userSlice";
@@ -100,10 +98,12 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: Color.WHITE,
   },
   contentWrapper: {
     flex: 1,
     backgroundColor: Color.LightGray,
+    backgroundColor: Color.WHITE,
   },
 
   topInputWrapper: {
